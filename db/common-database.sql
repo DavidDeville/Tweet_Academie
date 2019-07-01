@@ -1,3 +1,7 @@
+     DROP DATABASE IF EXISTS tweet_academie;
+     CREATE DATABASE tweet_academie;
+     USE tweet_academie;
+
      CREATE TABLE follower (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, follower_id INT NOT NULL, follow_date DATETIME NOT NULL, unfollow_date DATETIME DEFAULT NULL, INDEX IDX_B9D60946A76ED395 (user_id), INDEX IDX_B9D60946AC24F853 (follower_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB;
      CREATE TABLE chat_conversation (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB;
      CREATE TABLE chat_conversation_user (chat_conversation_id INT NOT NULL, user_id INT NOT NULL, INDEX IDX_BFCC678C6ABC99C1 (chat_conversation_id), INDEX IDX_BFCC678CA76ED395 (user_id), PRIMARY KEY(chat_conversation_id, user_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB;
