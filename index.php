@@ -2,6 +2,8 @@
 
 ini_set('display_errors', 1);
 
+session_start();
+
 require_once 'vendor/autoload.php';
 require_once 'model/UserModel.class.php';
 require_once 'controller/IndexController.class.php';
@@ -12,11 +14,24 @@ $twig = new Twig_Environment($loader);
 $user = new UserModel();
 $controller = new IndexController();
 
-echo $twig->render('index.htm.twig');
-
-if ($controller->trololo())
+if ($user->is_connected())
 {
-    //echo '<h1>Hello world !</h1>';
+    // page d'accueil si connecté
 }
+else
+{
+    echo $twig->render('index.htm.twig');    
+    
+    if ($controller->form_submited())
+    {
+        if ($controller->signed_up())
+        {
+            $user->register();
+        }
+        $user->login();
+    }
+}
+
+
 
 ?>

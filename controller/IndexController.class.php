@@ -7,9 +7,9 @@ require_once 'PageController.class.php';
 */
 class IndexController extends PageController
 {
-    public function trololo()
+    public function signed_up()
     {
-        return (true);
+        return false;
     }
 }
 

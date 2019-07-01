@@ -11,6 +11,13 @@ abstract class PageController extends Controller
     {
         // Redirection si pas connecté
     }
+
+    public function form_submited()
+    {
+        return (
+            count($_POST) > 0
+        );
+    }
 }
 
 ?>
