@@ -18,41 +18,53 @@ $response = [];
 $user = new UserModel();
 $form = new FormController();
 
-$form->field_is_filled(
-    $response, 
-    'signup-surname', 
-    'Please enter your surname'
-);
-$form->field_is_filled(
-    $response, 
-    'signup-forename', 
+$form->checkFieldIsFilled(
+    $response,
+    'signup-forename',
     'Please enter your forename'
 );
-$form->birthdate_is_valid(
+
+$form->checkFieldIsFilled(
     $response,
-    'signup-birthdate',
-    'You must be at least 18 to sign-up on this website'
+    'signup-surname',
+    'Please enter your forename'
 );
-$form->field_is_filled(
-    $response, 
-    'signup-gender', 
-    'Please select your gender'
+
+$form->checkBirthdateIsValid(
+    $response,
+    'signup-dob',
+    'You must be at least 18 years old to sign-up'
 );
-$form->field_is_filled(
-    $response, 
-    'signup-city', 
-    'Please enter your city'
+
+$form->checkFieldIsFilled(
+    $response,
+    'signup-city',
+    'Please enter your forename'
 );
-$response['signup-mail'] = (
-    $user->exists($_POST['signup-mail'])
-) ? 'That mail address is already bound to an account' : 'Valid';
-$form->password_is_strong_enough(
-    $response, 
-    'signup-password', 
-    'Your password is too weak, it should contain lower case, upper case, ' .
-        ' numbers and symbols (!@#\$%\^&amp;)'
+
+if ($form->checkValidMail(
+    $response,
+    'signup-mail',
+    'Please enter a valid mail address'
+))
+{
+    if ($user->exists($_POST['signup-mail']))
+    {
+        $response['signup-mail'] = 'That mail address is already in use';
+    }
+    else
+    {
+        $response['signup-mail'] = 'valid';
+    }
+}
+
+$form->checkPasswordStrength(
+    $response,
+    'signup-password',
+    'Your password is too weak'
 );
-$form->passwords_match(
+
+$form->checkPasswordsMatch(
     $response,
     'signup-password',
     'signup-password-conf',

@@ -3,20 +3,19 @@
 **
 ** @see forms.js for callback
 */
-$('#signup-submit').click(() =>
+$('#signup-submit').click((event) =>
 {
     event.preventDefault();
         
     const form = 
     {
-        'signup-surname': $('#signup-surname').val(),
         'signup-forename': $('#signup-forename').val(),
-        'signup-birthdate': $('#signup-birthdate').val(),
-        'signup-gender': $('#signup-gender').val(),
+        'signup-surname': $('#signup-surname').val(),
+        'signup-dob': $('#signup-dob').val(),
         'signup-city': $('#signup-city').val(),
         'signup-mail': $('#signup-mail').val(),
-        'signup-password': $('#signup-password').val(),
-        'signup-password-conf': $('#signup-password-conf').val()
+        'signup-password': $('#signup-pwd').val(),
+        'signup-password-conf': $('#signup-pwdcheck').val()
     };
 
     $.post(
