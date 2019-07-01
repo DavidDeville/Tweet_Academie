@@ -3,22 +3,8 @@
 {% block title %}Page d'accueil{% endblock %}
 
 {% block body %}
-<nav class='navbar navbar-expand-lg navbar-dark bg-primary'>
-  <a class='navbar-brand' href='index.php'>Tweet Académie</a>
-  <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarColor01' aria-controls='navbarColor01' aria-expanded='false' aria-label='Toggle navigation'>
-    <span class='navbar-toggler-icon'></span>
-  </button>
 
-  <div class='collapse navbar-collapse' id='navbarColor01'>
-    <ul class='navbar-nav mr-auto'>
-      <li class='nav-item active'>
-        <a class='nav-link' href='index.php'>Sign up / Log in<span class='sr-only'>(current)</span></a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<div class='row align-center'>
+<div class='row justify-content-center'>
   <form id='signin' class='col-5'>
     <label class='form-control-label' for='signin-mail'>E-mail</label>
     <input type='text' placeholder='Email' class='form-control' id='signin-mail'>
@@ -33,7 +19,7 @@
     <label class='form-control-label' for='signup-mail'>Email</label>
     <input type='text' placeholder='Email' class='form-control' id='signup-mail'>
 
-    <label class='form-control-label' for='signup-name'>Name</label>
+    <label class='form-control-label' for='signup-forename'>Forename</label>
     <input type='text' placeholder='Name' class='form-control' id='signup-name'>
 
     <label class='form-control-label' for='signup-surname'>Surname</label>
