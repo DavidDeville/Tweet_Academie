@@ -15,8 +15,8 @@ abstract class Model
         try
         {
             $this->link = new PDO(
-                'mysql:host=localhost;dbname=my_meetic', 
-                'root', 
+                'mysql:host=localhost;dbname=tweet_academie', 
+                'root',
                 'root'
             );
         }
