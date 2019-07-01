@@ -16,7 +16,7 @@ $controller = new IndexController();
 
 if ($user->is_connected())
 {
-    // page d'accueil si connecté
+    echo $twig->render('memberbase.htm.twig');
 }
 else
 {

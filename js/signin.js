@@ -3,14 +3,14 @@
 **
 ** @see forms.js for callback
 */
-$('#signin-submit').click(() =>
+$('#signin-submit').click((event) =>
 {
     event.preventDefault();
     
     const form = 
     {
         'signin-mail': $('#signin-mail').val(),
-        'signin-password': $('#signin-password').val()
+        'signin-pwd': $('#signin-pwd').val()
     };
 
     $.post(

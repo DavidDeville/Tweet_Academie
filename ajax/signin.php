@@ -16,18 +16,17 @@ require_once '../model/UserModel.class.php';
 
 $answer = [];
 $user = new UserModel();
-$form = new FormController();
 
-if ($user->exists($_POST['signin-mail']))
+if ($user->mail_exists($_POST['signin-mail']))
 {
-    $answer['signin-mail'] = 'Valid';
-    if ($user->password_match($_POST['signin-mail'], $_POST['signin-password']))
+    $answer['signin-mail'] = 'valid';
+    if ($user->password_match($_POST['signin-mail'], $_POST['signin-pwd']))
     {
-        $answer['signin-password'] = 'Valid';
+        $answer['signin-pwd'] = 'valid';
     }
     else
     {
-        $answer['signin-password'] = 'Wrong password';
+        $answer['signin-pwd'] = 'Wrong password';
     }
 }
 else

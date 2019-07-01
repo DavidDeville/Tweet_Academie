@@ -28,7 +28,7 @@ class UserModel extends Model
     public function account_exists(string $account_name)
     {
         $account_query = $this->link->prepare(
-            'SELECT * FROM user WHERE username = :username'
+            'SELECT id FROM user WHERE username = :username'
         );
         $account_query->execute([
             ':username' => $account_name
@@ -48,7 +48,7 @@ class UserModel extends Model
     public function mail_exists(string $mail)
     {
         $mail_query = $this->link->prepare(
-            'SELECT * FROM user WHERE email = :mail'
+            'SELECT id FROM user WHERE email = :mail'
         );
         $mail_query->execute([
             ':mail' => $mail
@@ -255,6 +255,18 @@ class UserModel extends Model
         {
             return ($_SESSION['city']);
         }
+    }
+
+    /*
+    ** Disconnects the user and removes everything from $_SESSION
+    */
+    public function logout()
+    {
+        foreach (array_keys($_SESSION) as $user_info)
+        {
+            unset($_SESSION[$user_info]);
+        }
+        session_destroy();
     }
 }
 
