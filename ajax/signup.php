@@ -9,6 +9,7 @@
 ** Please note that any key added in $answer will be treated in the calling
 ** javascript, so to not give informations about some fields under certain 
 ** conditions, don't add them in $response
+** Here, nothing will be shown about password confirmation unless password is valid
 */
 
 //ini_set('display_errors', 1);
