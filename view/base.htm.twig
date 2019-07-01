@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+    {% block head %}
+        <head>
+            <meta charset='ut-8'>
+            {% block title %}{% endblock %}
+            <link rel='stylesheet' href='css/style.css'>
+            <link rel='stylesheet' href='css/dark-theme.css'>
+            {% block stylesheets %}{% endblock %}
+        </head>
+    {% endblock %}
+
+    {% block body %}
+        <body>
+            {% block javascript %}{% endblock %}
+        </body>
+    {% endblock %}
+</html>
