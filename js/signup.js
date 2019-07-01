@@ -6,22 +6,22 @@
 $('#signup-submit').click((event) =>
 {
     event.preventDefault();
-        
+
     const form = 
     {
-        'signup-forename': $('#signup-forename').val(),
-        'signup-surname': $('#signup-surname').val(),
+        'signup-username': $('#signup-username').val(),
+        'signup-accname': $('#signup-accname').val(),
         'signup-dob': $('#signup-dob').val(),
         'signup-city': $('#signup-city').val(),
         'signup-mail': $('#signup-mail').val(),
-        'signup-password': $('#signup-pwd').val(),
-        'signup-password-conf': $('#signup-pwdcheck').val()
+        'signup-pwd': $('#signup-pwd').val(),
+        'signup-pwdcheck': $('#signup-pwdcheck').val()
     };
 
     $.post(
         'ajax/signup.php',
         form,
-        treatResponse,
+        treatAjaxFormResponse,
         'json'
     )
     .then(() =>
@@ -33,8 +33,10 @@ $('#signup-submit').click((event) =>
                 form
             ).then(() =>
             {
-                $(location).attr('href', 'index.php');
+                //$(location).attr('href', 'index.php');
             });
         }
     });
+
+    return false;
 });

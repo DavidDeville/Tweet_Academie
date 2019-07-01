@@ -16,7 +16,7 @@ $('#signin-submit').click(() =>
     $.post(
         'ajax/signin.php',
         form,
-        treatResponse,
+        treatAjaxFormResponse,
         'json'
     )
     .then(() =>

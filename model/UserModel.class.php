@@ -20,20 +20,40 @@ class UserModel extends Model
     /*
     ** Checks whether or not the user exists in the database
     **
+    ** @param string $account_name: the account name to search in the database
+    **
+    ** @return bool: true if the account was found in database, false otherwise
+    */
+    public function account_exists(string $account_name)
+    {
+        $account_query = $this->link->prepare(
+            'SELECT * FROM user WHERE username = :username'
+        );
+        $account_query->execute([
+            ':username' => $account_name
+        ]);
+        return (
+            $account_query->rowCount() > 0
+        );
+    }
+
+    /*
+    ** Checks whether or not the user exists in the database
+    **
     ** @param string $mail: the mail to search in the database
     **
-    ** @return bool: true if the user was found in database, false otherwise
+    ** @return bool: true if the mail was found in database, false otherwise
     */
-    public function exists(string $mail)
+    public function mail_exists(string $mail)
     {
-        $user_query = $this->link->prepare(
+        $mail_query = $this->link->prepare(
             'SELECT * FROM user WHERE email = :mail'
         );
-        $user_query->execute([
+        $mail_query->execute([
             ':mail' => $mail
         ]);
         return (
-            $user_query->rowCount() > 0
+            $mail_query->rowCount() > 0
         );
     }
 
