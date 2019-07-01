@@ -14,6 +14,7 @@ class UserModel extends Model
 
     public function __construct()
     {
+        parent::__construct();
         $this->hashSalt = 'si tu aimes la wac tape dans tes mains';
     }
 

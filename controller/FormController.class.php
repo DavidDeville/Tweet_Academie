@@ -49,7 +49,7 @@ class FormController extends Controller
     **
     ** @return bool: true is the date is valid, false otherwise
     */
-    public function check_birthdate_is_valid(Array &$reponse, string $field_name, string $error_message)
+    public function check_birthdate_is_valid(Array &$response, string $field_name, string $error_message)
     {
         $age = date_diff(
             new DateTime(),
@@ -77,7 +77,7 @@ class FormController extends Controller
     **
     ** @return bool: true is the mail is valid, false otherwise
     */
-    public function check_valid_mail(Array &$reponse, string $field_name, string $error_message)
+    public function check_valid_mail(Array &$response, string $field_name, string $error_message)
     {
         $valid_mail = preg_match(
             '/[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+.[a-zA-Z]{2,4}/',
@@ -121,7 +121,7 @@ class FormController extends Controller
         {
             if (! preg_match($pattern, $_POST[$field_name]))
             {
-                $strong_enough = $false;
+                $strong_enough = false;
             }
         }
         if ($strong_enough)
@@ -149,12 +149,12 @@ class FormController extends Controller
     {
         if ($_POST[$pwd_field] === $_POST[$pwd_conf_field])
         {
-            $response[$field_name] = $this->valid_message;
+            $response[$pwd_conf_field] = $this->valid_message;
             return (true);
         }
         else
         {
-            $response[$field_name] = $error_message;
+            $response[$pwd_conf_field] = $error_message;
             return (false);
         }
     }

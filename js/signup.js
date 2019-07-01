@@ -6,7 +6,6 @@
 $('#signup-submit').click((event) =>
 {
     event.preventDefault();
-
     const form = 
     {
         'signup-username': $('#signup-username').val(),
@@ -18,15 +17,12 @@ $('#signup-submit').click((event) =>
         'signup-pwdcheck': $('#signup-pwdcheck').val()
     };
 
-    console.log(form);
-    
-    //$.post(
-    //    'ajax/signup.php',
-    //    form,
-    //    treatAjaxFormResponse,
-    //    'json'
-    /*)/*
-    .then(() =>
+    $.post(
+        'ajax/signup.php',
+        form,
+        treatAjaxFormResponse,
+        'json'
+    ).then(() =>
     {
         if ($('.invalid-feedback').length === 0)
         {
@@ -38,7 +34,7 @@ $('#signup-submit').click((event) =>
                 //$(location).attr('href', 'index.php');
             });
         }
-    })*/    //;
+    });
 
-    return false;
+    //return false;
 });

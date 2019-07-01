@@ -8,14 +8,10 @@
 */
 const treatAjaxFormResponse = (response) =>
 {
-    console.log(response);
-    
-    return false;
-    
     for (let attribute in response)
     {
         let $input = $('#' + attribute);
-        if (response[attribute] !== 'Valid')
+        if (response[attribute] !== 'valid')
         {
             if (! $input.hasClass('is-invalid'))
             {

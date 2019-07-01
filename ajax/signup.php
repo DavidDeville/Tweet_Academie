@@ -11,6 +11,8 @@
 ** conditions, don't add them in $response
 */
 
+//ini_set('display_errors', 1);
+
 require_once '../controller/FormController.class.php';
 require_once '../model/UserModel.class.php';
 
@@ -21,7 +23,7 @@ $form = new FormController();
 $form->check_field_is_filled(
     $response,
     'signup-username',
-    'Please enter your forename'
+    'Please enter your username'
 );
 
 if($form->check_field_is_filled(
@@ -49,7 +51,7 @@ $form->check_birthdate_is_valid(
 $form->check_field_is_filled(
     $response,
     'signup-city',
-    'Please enter your forename'
+    'Please enter your city'
 );
 
 if ($form->check_valid_mail(
@@ -68,18 +70,20 @@ if ($form->check_valid_mail(
     }
 }
 
-$form->check_password_strength(
+if($form->check_password_strength(
     $response,
     'signup-pwd',
-    'Your password is too weak'
-);
-
-$form->check_passwords_match(
-    $response,
-    'signup-pwd',
-    'signup-pwdcheck',
-    'Passwords don\'t match'
-);
+    'Your password is too weak, it must contain lowercase, uppercase, ' . 
+    'digits and symbols (!@#$%^&amp;)'
+))
+{
+    $form->check_passwords_match(
+        $response,
+        'signup-pwd',
+        'signup-pwdcheck',
+        'Passwords don\'t match'
+    );
+}
 
 echo json_encode(
     $response
