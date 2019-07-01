@@ -3,7 +3,7 @@
 ini_set('display_errors', 1);
 
 require_once 'model/UserModel.class.php';
-require_once 'view/index.htm';
+require_once 'view/index.htm.twig';
 require_once 'controller/IndexController.class.php';
 
 $user = new UserModel();
