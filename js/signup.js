@@ -6,6 +6,7 @@
 $('#signup-submit').click((event) =>
 {
     event.preventDefault();
+    
     const form = 
     {
         'signup-username': $('#signup-username').val(),
@@ -31,10 +32,8 @@ $('#signup-submit').click((event) =>
                 form
             ).then(() =>
             {
-                //$(location).attr('href', 'index.php');
+                $(location).attr('href', 'index.php');
             });
         }
     });
-
-    //return false;
 });

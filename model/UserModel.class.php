@@ -85,21 +85,176 @@ class UserModel extends Model
         );
     }
 
+    /*
+    ** Checks if the user is currently connected
+    **
+    ** @return bool: true if the user is connected, false otherwise
+    */
     public function is_connected()
     {
         return (
             count($_SESSION) > 0
         );
     }
-    
+
+    /*
+    ** Puts the user in the database, based on sign-up form
+    */
     public function register()
     {
-
+        $register_query = $this->link->prepare(
+            'INSERT INTO user (
+                username, 
+                display_name, 
+                email, 
+                password, 
+                birth_date, 
+                city
+            ) VALUES (
+                :account_name,
+                :display_name,
+                :mail,
+                :password,
+                :birth_date,
+                :city
+            )'
+        );
+        $register_query->execute([
+            ':account_name' => $_POST['signup-accname'],
+            ':display_name' => $_POST['signup-username'],
+            ':mail' => $_POST['signup-mail'],
+            ':password' => hash('ripemd160', $_POST['signup-pwd'] . $this->hashSalt),
+            ':birth_date' => $_POST['signup-dob'],
+            ':city' => $_POST['signup-city']
+        ]);
+        
     }
 
+    /*
+    ** Connects the user and stores his informations in $_SESSION
+    ** To access his informations, please use accessors below
+    **      @see $this->get_account_id()
+    **      @see $this->get_account_name()
+    **      @see $this->get_pseudo()
+    **      @see $this->get_mail()
+    **      @see $this->get_birth_date()
+    **      @see $this->get_city()
+    */
     public function login()
     {
+        if (isset($_POST['signup-mail']))
+        {
+            $mail = $_POST['signup-mail'];
+        }
+        if (isset($_POST['signin-mail']))
+        {
+            $mail = $_POST['signin-mail'];
+        }
+        $infos_query = $this->link->prepare(
+            'SELECT 
+                id as "account-id", 
+                username as "account-name", 
+                display_name as "pseudo", 
+                email, 
+                birth_date as "birth-date", 
+                city
+            FROM user
+            WHERE email = :mail'
+        );
+        $infos_query->execute([
+            ':mail' => $mail
+        ]);
+        $infos = $infos_query->fetch(
+            PDO::FETCH_ASSOC
+        );
+        foreach (array_keys($infos) as $user_info)
+        {
+            $_SESSION[$user_info] = $infos[$user_info];
+        }
+    }
 
+    /*
+    ** Wraper for the field user.id in database
+    ** Requires the user to be connected
+    **
+    ** @return string: the id of the account (unique)
+    */
+    public function get_accound_id()
+    {
+        if ($this->is_connected())
+        {
+            return ($_SESSION['account-id']);
+        }
+    }
+
+    /*
+    ** Wraper for the field user.username in database
+    ** Requires the user to be connected
+    **
+    ** @return string: the name of the account (unique)
+    */
+    public function get_account_name()
+    {
+        if ($this->is_connected())
+        {
+            return ($_SESSION['account-name']);
+        }
+    }
+
+    /*
+    ** Wraper for the field user.display_name in database
+    ** Requires the user to be connected
+    **
+    ** @return string: the pseudo of the account
+    */
+    public function get_pseudo()
+    {
+        if ($this->is_connected())
+        {
+            return ($_SESSION['pseudo']);
+        }
+    }
+
+    /*
+    ** Wraper for the field user.email in database
+    ** Requires the user to be connected
+    **
+    ** @return string: the mail of the account
+    */
+    public function get_mail()
+    {
+        if ($this->is_connected())
+        {
+            return ($_SESSION['email']);
+        }
+    }
+
+    /*
+    ** Wraper for the field user.birth_date in database
+    ** Requires the user to be connected
+    **
+    ** @return string: the birth-date of the owner of the account
+    */
+    public function get_birth_date()
+    {
+        if ($this->is_connected())
+        {
+            return ($_SESSION['birth-date']);
+        }
+    }
+
+    /*
+    ** Wraper for the field user.city in database
+    ** Requires the user to be connected
+    **
+    ** @return string: the city of the owner of the account
+    */
+    public function get_city()
+    {
+        if ($this->is_connected())
+        {
+            return ($_SESSION['city']);
+        }
     }
 }
 
