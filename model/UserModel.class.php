@@ -84,6 +84,23 @@ class UserModel extends Model
             ) === $user_password
         );
     }
+
+    public function is_connected()
+    {
+        return (
+            count($_SESSION) > 0
+        );
+    }
+    
+    public function register()
+    {
+
+    }
+
+    public function login()
+    {
+
+    }
 }
 
 ?>
