@@ -18,12 +18,14 @@ $('#signup-submit').click((event) =>
         'signup-pwdcheck': $('#signup-pwdcheck').val()
     };
 
-    $.post(
-        'ajax/signup.php',
-        form,
-        treatAjaxFormResponse,
-        'json'
-    )
+    console.log(form);
+    
+    //$.post(
+    //    'ajax/signup.php',
+    //    form,
+    //    treatAjaxFormResponse,
+    //    'json'
+    /*)/*
     .then(() =>
     {
         if ($('.invalid-feedback').length === 0)
@@ -36,7 +38,7 @@ $('#signup-submit').click((event) =>
                 //$(location).attr('href', 'index.php');
             });
         }
-    });
+    })*/    //;
 
     return false;
 });

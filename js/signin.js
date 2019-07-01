@@ -3,7 +3,7 @@
 **
 ** @see forms.js for callback
 */
-$('#signin-submit').click(() =>
+/*$('#signin-submit').click(() =>
 {
     event.preventDefault();
     
@@ -33,3 +33,4 @@ $('#signin-submit').click(() =>
         }
     });
 });
+*/
