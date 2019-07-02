@@ -16,12 +16,13 @@ $controller = new IndexController();
 
 if ($user->is_connected())
 {
-    echo $twig->render('memberbase.htm.twig');
+    echo $twig->render('memberbase.htm.twig',
+    ['account_name' => $user->get_account_name()]);
 }
 else
 {
-    echo $twig->render('index.htm.twig');    
-    
+    echo $twig->render('index.htm.twig');
+
     if ($controller->form_submited())
     {
         if ($controller->signed_up())
