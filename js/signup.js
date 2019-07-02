@@ -11,7 +11,7 @@ $('#signup-submit').click((event) =>
     {
         'signup-username': $('#signup-username').val(),
         'signup-accname': $('#signup-accname').val(),
-        'signup-dob': $('#signup-dob').val(),
+        'signup-dob': $('#signup-dob').val() ,
         'signup-city': $('#signup-city').val(),
         'signup-mail': $('#signup-mail').val(),
         'signup-pwd': $('#signup-pwd').val(),
