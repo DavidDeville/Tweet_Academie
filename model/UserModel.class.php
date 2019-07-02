@@ -15,7 +15,7 @@ class UserModel extends Model
     public function __construct()
     {
         parent::__construct();
-        $this->hashSalt = 'si tu aimes la wac tape dans tes mains';
+        $this->hashSalt = 'vive le projet tweet_academy';
     }
 
     /*
@@ -179,7 +179,7 @@ class UserModel extends Model
     **
     ** @return string: the id of the account (unique)
     */
-    public function get_accound_id()
+    public function get_account_id()
     {
         if ($this->is_connected())
         {
@@ -267,6 +267,40 @@ class UserModel extends Model
             unset($_SESSION[$user_info]);
         }
         session_destroy();
+    }
+
+    /*
+    ** Updates the user info from the update form on his profile
+    */
+    public function update()
+    {
+        $correspondings = [
+            'info-email' => 'email',
+            'info-name' => 'display_name',
+            'info-city' => 'city',
+            'info-dob' => 'birth_date',
+            'info-pwd' => 'password'
+        ];
+        $update_query_string = 'UPDATE user SET ';
+        if ($_POST['info-pwd'] === '')
+        {
+            $_POST = array_diff($_POST, [$_POST['info-pwd']]);
+        }
+        if (isset($_POST['info-checkpwd']))
+        {
+            $_POST = array_diff($_POST, [$_POST['info-checkpwd']]);
+        }
+        $_POST = array_diff($_POST, [$_POST['info-oldpwd']]);
+        foreach (array_keys($_POST) as $user_info)
+        {
+            $update_query_string .= $correspondings[$user_info] . ' = "' . $_POST[$user_info] . '", ';
+        }
+        $update_query_string = substr($update_query_string, 0, strlen($update_query_string) - 2);
+        $update_query_string .= ' WHERE id = ' . $this->get_account_id();
+        $update_query = $this->link->prepare(
+            $update_query_string
+        );
+        $update_query->execute();
     }
 }
 
