@@ -4,10 +4,19 @@
 
 {% block body %}
 
-  <form id='uploadimg'>
+  <div class='row mt-3'>
+    <h1 class='mx-auto'>{{ account_name }}'s profile</h1>
+  </div>
+
+<div class='row mt-3'>
+  <img class='mx-auto' src='' alt='Your Profile Picture'>
+</div>
+
+  <form id='uploadimg' class='col-4 mx-auto mt-3'>
     <input id='file' type='file' name='upload'>
-    <input id='submitupload' type='submit' name='submitupload' value='Change image'>
+    <input id='submitupload' class='float-right' type='submit' name='submitupload' value='Change image'>
   </form>
+
   <form id='modifyinfo' class='col-6 mx-auto'>
     <input id='email' class='mt-3 form-control' type='email' name='email' value='{{ email }}'>
     <input id='name' class='mt-3 form-control' type='text' name='profilename' value='{{ name }}'>
@@ -18,8 +27,17 @@
     <input id='checkpwd' class='mt-3 form-control' type='password' name='pwd' placeholder='Password'>
     <input id='submitinfo' class='mt-3 mx-auto' type='submit' name='submit' value='Change Infos'>
   </form>
+
+<ul class='list-group d-inline-block'>
+  <li class='list-group-item active'>You follow :</li>
+</ul>
+
+<ul class='list-group d-inline-block'>
+  <li class='list-group-item'>They follow you :</li>
+</ul>
 {% endblock %}
 
 {% block javascript %}
+  <script src='js/forms.js'></script>
   <script src='js/profile.js'></script>
 {% endblock %}
