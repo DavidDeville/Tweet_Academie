@@ -12,19 +12,27 @@
     <img class='mx-auto' src='' alt='Profile Picture'>
 </div>
 
-<div>
-    <ul>
-        <li>Pseudo: {{ name }}</li>
-        <li>Mail: {{ email }}</li>
-        <li>City: {{ city }}</li>
-        <li>Birth date: {{ dob }}</li>
-    </ul>
+<table class='table col-6 mt-2 mx-auto'>
+    <tr>
+        <th scope='col'>Pseudo</th>
+        <th scope='col'>City</th>
+        <th scope='col'>Birth date</th>
+    </tr>
+    <tr class='table-info'>
+        <td>{{ name }}</td>
+        <td>{{ city }}</td>
+        <td>{{ dob }}</td>
+    </tr>
+</table>
+
+<div class='row col-6 justify-content-between mx-auto'>
+    <button class='btn btn-success' id='follow'>Follow</button>
+    <button class='btn btn-success text-right' id'talk'>Send a message</button>
 </div>
 
 {% endblock %}
 
 {% block javascript %}
-<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src='js/forms.js'></script>
-  <script src='js/profile.js'></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src='js/profile.js'></script>
 {% endblock %}
