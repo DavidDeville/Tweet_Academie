@@ -43,7 +43,7 @@ else
     $infos = $target->get_infos($_GET['account']);
     echo $twig->render('profile.htm.twig', [
         'account_name' => $user->get_account_name(),
-        'target_name' => $infos['username'],
+        'target_name' => $infos['display_name'],
         'email' => $infos['email'],
         'name' => $infos['display_name'],
         'city' => $infos['city'],

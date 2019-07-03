@@ -1,5 +1,7 @@
 <?php
 
+ini_set('display_errors', 1);
+
 require_once 'Model.class.php';
 
 /*
@@ -326,6 +328,17 @@ class UserModel extends Model
                 PDO::FETCH_ASSOC
             )
         );
+    }
+
+    public function follow(string $account_name)
+    {
+        $follow_query = $this->link->prepare(
+            'INSERT INTO follower (user_id, follower_id, follow_date) VALUES (:user_id, :follower_id, NOW())'
+        );
+        $follow_query->execute([
+            ':user_id' => 1, 
+            ':follower_id' => 3
+        ]);
     }
 }
 
