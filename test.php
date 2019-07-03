@@ -16,7 +16,7 @@ $controller = new IndexController();
 
 if ($user->is_connected())
 {
-    echo $twig->render('mail_histories.htm.twig', [
+    echo $twig->render('mail_history.htm.twig', [
         'account_name' => $user->get_account_name(),
         'conversations' => [[
             'unread' => true,
