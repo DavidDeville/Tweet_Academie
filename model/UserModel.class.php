@@ -330,6 +330,9 @@ class UserModel extends Model
         );
     }
 
+    /*
+    ** Makes the connected user follow someone else
+    */
     public function follow(string $account_name)
     {
         $follow_query = $this->link->prepare(
@@ -339,6 +342,54 @@ class UserModel extends Model
             ':user_id' => 1, 
             ':follower_id' => 3
         ]);
+    }
+
+    /*
+    ** Returns the list of people the connected user follows
+    **
+    ** @return Array: the list of people (usernames) the connected user follows
+    */
+    public function get_followings()
+    {
+        $followings_query = $this->link->prepare(
+            'SELECT username 
+            FROM follower 
+                INNER JOIN user 
+                    ON follower.user_id = user.id 
+            WHERE follower_id = :follower_id'
+        );
+        $followings_query->execute([
+            ':follower_id' => $this->get_account_id()
+        ]);
+        return (
+            $followings_query->fetchAll(
+                PDO::FETCH_ASSOC
+            )
+        );
+    }
+
+    /*
+    ** Returns the list of people who follows the connected user
+    **
+    ** @return Array: the list of people who follows the connected user
+    */
+    public function get_followers()
+    {
+        $followers_query = $this->link->prepare(
+            'SELECT username 
+            FROM follower 
+                INNER JOIN user 
+                    ON follower.user_id = user.id 
+            WHERE user_id = :user_id'
+        );
+        $followers_query->execute([
+            ':user_id' => $this->get_account_id()
+        ]);
+        return (
+            $followers_query->fetchAll(
+                PDO::FETCH_ASSOC
+            )
+        );
     }
 }
 

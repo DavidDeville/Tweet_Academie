@@ -12,33 +12,53 @@
   <img class='mx-auto' src='' alt='Your Profile Picture'>
 </div>
 
-  <form id='uploadimg' class='col-4 mx-auto mt-3' enctype='multipart/form-data'>
-    <input id='file' type='file' name='upload'>
-    <input id='submitupload' class='float-right' type='submit' name='submitupload' value='Change image'>
-  </form>
+<div class='row col-12'>
+  
+  <div class='card col-3 border-info mb-3'>
+    <div class='card-header'>You follow them</div>
+    <div class='card-body'>
+      {% for following in followings %}
+        <p class='card-text'><a class='text-info' href='profile.php?account={{ following.username }}'>@{{ following.username }}</a></p>
+      {% endfor %}
+    </div>
+  </div>
 
-  <form id='modifyinfo' class='col-6 mx-auto'>
-    <input id='info-email' class='mt-3 form-control' type='email' name='email' value='{{ email }}'>
-    <input id='info-name' class='mt-3 form-control' type='text' name='profilename' value='{{ name }}'>
-    <input id='info-city' class='mt-3 form-control' type='text' name='city' value='{{ city }}'>
-    <input id='info-dob' class='mt-3 form-control' type='date' name='email' value='{{ dob }}'>
-    <input id='info-oldpwd' class='mt-3 form-control' type='password' name='pwd' placeholder='Old password'>
-    <input id='info-pwd' class='mt-3 form-control' type='password' name='pwd' placeholder='Password'>
-    <input id='info-checkpwd' class='mt-3 form-control' type='password' name='pwd' placeholder='Password'>
-    <input id='submitinfo' class='mt-3 mx-auto' type='submit' name='submit' value='Change Infos'>
-  </form>
+  <div class='col-6'>
+    <form id='uploadimg' class='col-6 mx-auto mt-3' enctype='multipart/form-data'>
+      <input id='file' type='file' name='upload'>
+      <input id='submitupload' class='float-right' type='submit' name='submitupload' value='Change image'>
+    </form>
 
-<ul class='list-group d-inline-block'>
-  <li class='list-group-item active'>You follow :</li>
-</ul>
+    <form id='modifyinfo' class='col-6 mx-auto'>
+      <input id='info-email' class='mt-3 form-control' type='email' name='email' value='{{ email }}'>
+      <input id='info-name' class='mt-3 form-control' type='text' name='profilename' value='{{ name }}'>
+      <input id='info-city' class='mt-3 form-control' type='text' name='city' value='{{ city }}'>
+      <input id='info-dob' class='mt-3 form-control' type='date' name='email' value='{{ dob }}'>
+      <input id='info-oldpwd' class='mt-3 form-control' type='password' name='pwd' placeholder='Old password'>
+      <input id='info-pwd' class='mt-3 form-control' type='password' name='pwd' placeholder='Password'>
+      <input id='info-checkpwd' class='mt-3 form-control' type='password' name='pwd' placeholder='Password'>
+      <input id='submitinfo' class='mt-3 mx-auto' type='submit' name='submit' value='Change Infos'>
+    </form>
+  </div>
 
-<ul class='list-group d-inline-block'>
-  <li class='list-group-item'>They follow you :</li>
-</ul>
+  <div class='card col-3 border-info mb-3'>
+    <div class='card-header'>They follow you</div>
+    <div class='card-body'>
+      {% for follower in followers %}
+        <p class='card-text'><a class='text-success' href='profile.php?account={{ follower.username }}'>@{{ follower.username }}</a></p>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+
+
+
 {% endblock %}
 
 {% block javascript %}
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
   <script src='js/forms.js'></script>
   <script src='js/self_profile.js'></script>
 {% endblock %}

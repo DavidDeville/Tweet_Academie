@@ -17,6 +17,8 @@ $controller = new ProfileController();
 if ($_GET['account'] === $user->get_account_name())
 {
     echo $twig->render('self_profile.htm.twig', [
+        'followers' => $user->get_followers(),
+        'followings' => $user->get_followings(),
         'account_name' => $user->get_account_name(),
         'email' => $user->get_mail(),
         'name' => $user->get_pseudo(),
