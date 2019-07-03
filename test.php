@@ -16,8 +16,19 @@ $controller = new IndexController();
 
 if ($user->is_connected())
 {
-    echo $twig->render('mail_histories.htm.twig',
-    ['account_name' => $user->get_account_name()]);
+    echo $twig->render('mail_histories.htm.twig', [
+        'account_name' => $user->get_account_name(),
+        'conversations' => [[
+            'unread' => true,
+            'name' => 'Conversation avec AR7CORE'
+        ], [
+            'unread' =>false,
+            'name' =>'Conversation avec Flobin'
+        ], [
+            'unread' => false,
+            'name' => 'Conversation avec ta femme'
+        ]]
+    ]);
 }
 else
 {
