@@ -14,24 +14,43 @@ $twig = new Twig_Environment($loader);
 $user = new UserModel();
 $controller = new ProfileController();
 
-echo $twig->render('profile.htm.twig', [
-    'account_name' => $user->get_account_name(),
-    'email' => $user->get_mail(),
-    'name' => $user->get_pseudo(),
-    'city' => $user->get_city(),
-    'dob' => $user->get_birth_date()
-]);
-
-if ($controller->form_submited())
+if ($_GET['account'] === $user->get_account_name())
 {
-    if ($controller->info_updated())
+    echo $twig->render('self_profile.htm.twig', [
+        'account_name' => $user->get_account_name(),
+        'email' => $user->get_mail(),
+        'name' => $user->get_pseudo(),
+        'city' => $user->get_city(),
+        'dob' => $user->get_birth_date()
+    ]);
+
+    if ($controller->form_submited())
     {
-        $user->update();
-    }
-    else
-    {
-        // uploader l'image
+        if ($controller->info_updated())
+        {
+            $user->update();
+        }
+        else
+        {
+            // uploader l'image
+        }
     }
 }
+
+else
+{
+    $target = new UserModel();
+    $infos = $target->get_infos($_GET['account']);
+    echo $twig->render('profile.htm.twig', [
+        'account_name' => $user->get_account_name(),
+        'target_name' => $infos['username'],
+        'email' => $infos['email'],
+        'name' => $infos['display_name'],
+        'city' => $infos['city'],
+        'dob' => $infos['birth_date']
+    ]);
+}
+
+
 
 ?>

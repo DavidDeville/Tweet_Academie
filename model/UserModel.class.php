@@ -302,6 +302,31 @@ class UserModel extends Model
         );
         $update_query->execute();
     }
+
+    /*
+    ** Returns all information from a user from its account name
+    */
+    public function get_infos(string $account_name)
+    {
+        $infos_query = $this->link->prepare(
+            'SELECT 
+                id, 
+                username, 
+                display_name, 
+                email, 
+                birth_date, 
+                city
+            FROM user WHERE username = :account_name'
+        );
+        $infos_query->execute([
+            ':account_name' => $account_name
+        ]);
+        return (
+            $infos_query->fetch(
+                PDO::FETCH_ASSOC
+            )
+        );
+    }
 }
 
 ?>
