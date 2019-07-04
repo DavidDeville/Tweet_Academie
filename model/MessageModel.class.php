@@ -37,7 +37,7 @@ class MessageModel extends Model
   {
     $user_convs = $this->link->prepare(
       'SELECT chat_conversation_id
-      FROM chat_conversation_user
+      FROM chat_participant
       WHERE user_id = :id_user
       ORDER BY chat_conversation_id'
     );
@@ -134,7 +134,7 @@ class MessageModel extends Model
   public function add_participant(int $conv_id, int $user_id)
   {
     $add_user = $this->link->prepare(
-      'INSERT INTO chat_conversation_user (
+      'INSERT INTO chat_participant (
         chat_conversation_id,
         user_id)
       VALUES (
@@ -190,7 +190,7 @@ class MessageModel extends Model
     $members = [];
     $members_query = $this->link->prepare(
       'SELECT DISTINCT user_id
-      FROM chat_conversation_user
+      FROM chat_participant
       WHERE chat_conversation_id = :conv_id
       ORDER BY user_id'
     );
