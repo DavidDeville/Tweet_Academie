@@ -51,21 +51,26 @@
                         <h5 class="mb-1">Tweet by {{ account_name }}</h5>
                         <small>Posted : 3 days ago</small>
                         </div>
-                        <p class="mb-1">Je suis enfin sur Twitter, youhou !</p>
-                        <small>Reply</small>
-                        <small>Retweet</small>
-                        <small>Like</small>
-                    </div>
-                    <div class="list-group-item list-group-item-action flex-column align-items-start mt-2">
-                        <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Tweet by {{ tweet.member_tweet }}</h5>
-                        <small class="text-muted">Posted 3 : days ago</small>
+                        {% for tweet in tweets %}
+                            {% if tweet.current_user %}
+                                <p class="mb-1">{{ tweet.current_user_tweet }}</p>
+                                <small>Reply</small>
+                                <small>Retweet</small>
+                                <small>Like</small>
                         </div>
-                        <p class="mb-1">On s'en fout le n00b !</p>
-                        <small class="text-muted">Reply</small>
-                        <small class="text-muted">Retweet</small>
-                        <small class="text-muted">Like</small>
-                    </div>
+                            {% else %}
+                            <div class="list-group-item list-group-item-action flex-column align-items-start mt-2">
+                                <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Tweet by {{ tweet.current_user }}</h5>
+                                <small class="text-muted">Posted 3 : days ago</small>
+                                </div>
+                                <p class="mb-1">{{ tweet.member_tweet }}</p>
+                                <small class="text-muted">Reply</small>
+                                <small class="text-muted">Retweet</small>
+                                <small class="text-muted">Like</small>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
                 </div>
             </div>
         </div>
