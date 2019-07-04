@@ -1,4 +1,4 @@
-{% extends 'base.htm.twig' %}
+{% extends 'memberbase.htm.twig' %}
 
 {% block title %}Messagerie{% endblock %}
 
@@ -33,16 +33,22 @@
 
 {% block body %}
     <div class="col-12 mt-3">
-        <div class="card-header text-white">Conversation avec [nom du membre]{{ members }}</div>
+        <div class="card-header text-white m"><span class="">Currently chatting with [member's name]{{ members }}</span></div>
         <div class="jumbotron bg-secondary">
             <p class="lead">[Endroit où on affiche les messages de la conversation avec le foreach]</p>
             {% for message in messages %}
-                <div class="lead"><span class="border border-purple rounded-lg p-2 text-dark bg-success">{{ message.id }}</span></div>
+                {% if message.current_user %}
+                    <div class="lead mt-4"><span class="border border-blue rounded p-2 text-dark bg-warning">{{ message.current_user_message }}</span></div>
+                {% else %}
+                    <div class="lead mt-4"><span class="border border-purple rounded-lg p-2 text-dark bg-success">{{ message.member_message }}</span></div>
+                {% endif %}
             {% endfor %}
-            <div class="mt-5">      
+            <div class="mt-5">
                 <div class="form-group">
-                    <label for="exampleFormControlTextarea1" class="text-info"><strong>Zone de message</strong></label>
-                    <textarea class="form-control col-sm" id="exampleFormControlTextarea1" rows="4"></textarea>
+                    <label for="exampleFormControlTextarea1" class="text-info"><h4><strong>Chatbox</strong></h4></label>
+                    <textarea class="form-control col-sm-9" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <button type="button" class="btn btn-info mt-2">Insert image</button>
+                    <button type="button" class="btn btn-success mt-2 ml-2">Send message</button>
                 </div>
             </div>
         </div>
