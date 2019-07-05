@@ -358,25 +358,50 @@ class UserModel extends Model
     }
 
     /*
-    ** Makes the connected user follow someone else
+    ** Makes the connected user follow someone else if he's not already following him
     */
     public function follow(string $account_name)
     {
+        $target_id = $this->get_infos($account_name)['id'];
+        if (! $this->follows($target_id))
+        {
+            $follow_query = $this->link->prepare(
+                'INSERT INTO follower (
+                    user_id, 
+                    follower_id_id, 
+                    follow_date
+                ) VALUES (
+                    :user_id, 
+                    :follower_id, 
+                    NOW()
+                )'
+            );
+            $follow_query->execute([
+                ':user_id' => $target_id, 
+                ':follower_id' => $this->get_account_id()
+            ]);
+        }
+    }
+
+    /*
+    ** Checks if the connected user followed the specified user
+    */
+    private function follows(int $target_id)
+    {
         $follow_query = $this->link->prepare(
-            'INSERT INTO follower (
-                user_id, 
-                follower_id_id, 
-                follow_date
-            ) VALUES (
-                :user_id, 
-                :follower_id, 
-                NOW()
-            )'
+            'SELECT id 
+            FROM follower
+            WHERE 
+                user_id = :target_id &&
+                follower_id_id = :follower_id'
         );
         $follow_query->execute([
-            ':user_id' => $this->get_infos($account_name)['id'], 
+            ':target_id' => $target_id,
             ':follower_id' => $this->get_account_id()
         ]);
+        return (
+            $follow_query->rowCount() > 0
+        );
     }
 
     /*
