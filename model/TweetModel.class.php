@@ -153,12 +153,32 @@ class TweetModel extends Model
     **
     ** @param int $id: id of the tweet to update
     **
-    **  
+    ** @param string $content: replace original content by the new one
     */
-    public function update()
+    public function update(int $id, string $content)
     {
-      
+       $update_tweet_query = $this->link->prepare(
+           'UPDATE post 
+           SET content = :content
+           WHERE id = :id'
+       );
+
+       $update_tweet_query->execute([
+            ':content' => $content,
+            ':id' => $id
+       ]);
     }
 
+    /*
+    ** Function to like a tweet
+    **
+    ** @param int $id: id of the tweet to update
+    **
+    ** @param int $user_id: id of the user that liked the tweet
+    **
+    ** @param int $post_id: id of the liked tweet
+    */
+
+    
 }
 ?>
