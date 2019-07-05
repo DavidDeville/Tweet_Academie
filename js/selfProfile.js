@@ -17,7 +17,7 @@ $('#submitinfo').click((event) =>
     };
 
     $.post(
-        'ajax/profile_info.php',
+        'ajax/profile_update.php',
         form,
         treatAjaxFormResponse,
         'json'
