@@ -1,8 +1,3 @@
-const trololo = (response) =>
-{
-    console.log(response);
-};
-
 /*
 ** Ajax request to upload profile forms
 */
@@ -32,12 +27,11 @@ $('#submitinfo').click((event) =>
         {
             $.post(
                 'profile.php',
-                form,
-                trololo,
-                'text'
+                form
             ).then(() =>
             {
-                console.log('formulaire envoyé');
+                location.reload();
+                //console.log('formulaire envoyé');
             });
         }
     });

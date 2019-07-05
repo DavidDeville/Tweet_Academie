@@ -8,6 +8,8 @@
 */
 const treatAjaxFormResponse = (response) =>
 {
+    console.log(response);
+
     for (let attribute in response)
     {
         let $input = $('#' + attribute);

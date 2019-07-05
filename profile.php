@@ -7,12 +7,16 @@ session_start();
 require_once 'vendor/autoload.php';
 require_once 'model/UserModel.class.php';
 require_once 'controller/ProfileController.class.php';
+require_once 'controller/FormProfileUpdateController.class.php';
+//require_once 'controller/FormProfileUploadController.class.php';
 
 $loader = new Twig_Loader_Filesystem(__DIR__ . '/view');
 $twig = new Twig_Environment($loader);
 
 $user = new UserModel();
 $controller = new ProfileController();
+$update = new FormProfileUpdateController();
+//$upload = new FormProfileUploadController();
 
 if ($_GET['account'] === $user->get_account_name())
 {
@@ -24,25 +28,13 @@ if ($_GET['account'] === $user->get_account_name())
         'name' => $user->get_pseudo(),
         'city' => $user->get_city(),
         'dob' => $user->get_birth_date()
-    ]);
-
-    if ($controller->form_submited())
-    {
-        if ($controller->info_updated())
-        {
-            $user->update();
-        }
-        else
-        {
-            // uploader l'image
-        }
-    }
+    ]); 
 }
-
 else
 {
     $target = new UserModel();
     $infos = $target->get_infos($_GET['account']);
+    
     echo $twig->render('profile.htm.twig', [
         'account_name' => $user->get_account_name(),
         'target_name' => $infos['display_name'],
@@ -53,6 +45,26 @@ else
     ]);
 }
 
+if ($controller->info_updated() && $update->is_valid())
+{
+    // Password must be correct to update informations
+    if ($user->password_match($_POST['info-email'], $_POST['info-oldpwd']))
+    {
+        // If no new mail has been entered
+        if ($user->get_mail() === $_POST['info-email'])
+        {
+            $user->update();
+        }
+        // If new mail is available
+        else if ($user->mail_is_available($_POST['info-email']))
+        {
+            $user->update();
+        }
+    }
+}
+/*if ($controller->picture_uploaded() && $upload->is_valid())
+{
 
+}*/
 
 ?>

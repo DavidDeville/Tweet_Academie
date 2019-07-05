@@ -5,8 +5,19 @@ require_once 'PageController.class.php';
 /*
 ** Controller for the page profile.php
 */
-class ProfileController extends PageController
+final class ProfileController extends PageController
 {
+    // If no account name has been specified, redirect to homepage
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (! isset($_GET['account']))
+        {
+            header('location: index.php');
+        }
+    }
+
     /*
     ** Checks if the user submited the info update form
     **
@@ -14,22 +25,11 @@ class ProfileController extends PageController
     */
     public function info_updated()
     {
-        if ($this->form_submited())
-        {
-            $key = array_keys($_POST)[0];
-            if (strpos($key, 'info') !== false)
-            {
-                return (true);
-            }
-            else
-            {
-                return (false);
-            }
-        }
-        else
-        {
-            return (false);
-        }
+        return (
+            $this->form_matches(
+                'info'
+            )
+        );
     }
 }
 

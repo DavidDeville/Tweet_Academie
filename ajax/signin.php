@@ -6,36 +6,45 @@
 ** Returns a JSON object where attributes names are
 ** form fields, and attributes values are error messages if any, 'Valid' otherwise
 **
-** Please note that any key added in $answer will be treated in the calling
+** Please note that any status in form will be treated in the calling
 ** javascript, so to not give informations about some fields under certain 
-** conditions, don't add them in $answer
+** conditions, don't add them
+** Here, password info isn't display unless valid and bound mail is given
 */
 
-require_once '../controller/FormController.class.php';
+require_once '../controller/FormSignInController.class.php';
 require_once '../model/UserModel.class.php';
 
-$answer = [];
 $user = new UserModel();
+$form = new FormSignInController();
 
-if ($user->mail_exists($_POST['signin-mail']))
+$form->is_valid();
+
+/*
+** ID of fields in the form
+*/
+$mail = 'signin-mail';
+$password = 'signin-pwd';
+
+// Only check if accountexists if a valid address has been entered
+if ($form->field_is_valid($mail))
 {
-    $answer['signin-mail'] = 'valid';
-    if ($user->password_match($_POST['signin-mail'], $_POST['signin-pwd']))
+    // Only check password validity is valid account has been entered
+    if ($user->mail_exists($_POST[$mail]))
     {
-        $answer['signin-pwd'] = 'valid';
+        if (! $user->password_match($_POST[$mail], $_POST[$password]))
+        {
+            $form->set_state($password, 'Wrong password');
+        }
     }
     else
     {
-        $answer['signin-pwd'] = 'Wrong password';
+        $form->set_state($mail, 'That mail address isn\'t bound to an account');
     }
-}
-else
-{
-    $answer['signin-mail'] = 'That mail address isn\'t bound to an account';
 }
 
 echo json_encode(
-    $answer
+    $form->status()
 );
 
 ?>

@@ -1,3 +1,8 @@
+const trololo = (response) =>
+{
+    console.log(response);
+};
+
 /*
 ** Sends an ajax request and determines if the form should be submited
 **
@@ -25,11 +30,13 @@ $('#signup-submit').click((event) =>
         'json'
     ).then(() =>
     {
-        if ($('.invalid-feedback').length === 0)
+        if ($('#signup').find('.invalid-feedback').length === 0)
         {
             $.post(
                 'index.php',
-                form
+                form,
+                trololo,
+                'text'
             ).then(() =>
             {
                 $(location).attr('href', 'index.php');

@@ -5,7 +5,7 @@ require_once 'PageController.class.php';
 /*
 ** Controller for the index
 */
-class IndexController extends PageController
+final class IndexController extends PageController
 {
     /*
     ** Checks if the user submited the sign-up form
@@ -14,22 +14,25 @@ class IndexController extends PageController
     */
     public function signed_up()
     {
-        if ($this->form_submited())
-        {
-            $key = array_keys($_POST)[0];
-            if (strpos($key, 'signup') !== false)
-            {
-                return (true);
-            }
-            else
-            {
-                return (false);
-            }
-        }
-        else
-        {
-            return (false);
-        }
+        return (
+            $this->form_matches(
+                'signup'
+            )
+        );
+    }
+
+    /*
+    ** Checks if the user submited the sign-in form
+    **
+    ** @return bool: true if user submited sign-in form, false otherwise
+    */
+    public function signed_in()
+    {
+        return (
+            $this->form_matches(
+                'signin'
+            )
+        );
     }
 }
 

@@ -21,7 +21,7 @@ $('#signin-submit').click((event) =>
     )
     .then(() =>
     {   
-        if ($('.invalid-feedback').length === 0)
+        if ($('#signin').find('.invalid-feedback').length === 0)
         {
             $.post(
                 'index.php',

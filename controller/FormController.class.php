@@ -3,39 +3,101 @@
 require_once 'Controller.class.php';
 
 /*
-** Form-validation controller
+** Form-validation base controller
 */
-class FormController extends Controller
+abstract class FormController extends Controller
 {
     /*
     ** The message to display in AJAX response when fields are valid
     */
-    private $valid_message;
+    protected $valid_message;
+
+    /*
+    ** The status of the form, an associative array where keys are
+    ** field names and values are error message, if any
+    */
+    protected $status;
 
     public function __construct()
     {
         $this->valid_message = 'valid';
+        $this->status = [];
+    }
+
+    /*
+    ** Checks if the server response contains error messages
+    **
+    ** @return bool: true is the form is valid, false if it contains errors
+    */
+    public function is_valid()
+    {
+        foreach ($this->status as $status)
+        {
+            if ($status !== $this->valid_message)
+            {
+                return (false);
+            }
+        }
+        return (true);
+    }
+
+    /*
+    ** Returns the status of the form
+    **
+    ** @return Array: the status of the form
+    **      @see $this->status
+    */
+    public function status()
+    {
+        return (
+            $this->status
+        );
+    }
+
+    /*
+    ** Checks if the given field is valid
+    **
+    ** @param string $field_name: the field to check
+    **
+    ** @return bool: true if the field is valid, false otherwise
+    */
+    public function field_is_valid(string $field_name)
+    {
+        return (
+            $this->status[$field_name] === $this->valid_message
+        );
+    }
+
+    /*
+    ** Stores a state, should be called if given field depends of external
+    ** information, ie a model
+    **
+    ** @param $field_name: the field to set status for
+    ** @param string status: the status of the field
+    */
+    public function set_state(string $field_name, string $status)
+    {
+        $this->write_status($field_name, $status);
     }
 
     /*
     ** Checks if the given field is filled in $_POST
     **
-    ** @param Array &$response: the AJAX response
     ** @param string $field_name: the field to check
-    ** @param string $error_message: the error message to put in $response
+    ** @param string $error_message: the error message to write in status
     **
     ** @return bool: true is the field was filled, false otherwise
     */
-    public function check_field_is_filled(Array &$response, string $field_name, string $error_message)
+    protected function field_is_filled(string $field_name, string $error_message)
     {
-        if (isset($_POST[$field_name]) && strlen($_POST[$field_name]) > 1)
+        if (strlen($_POST[$field_name]) >= 2)
         {
-            $response[$field_name] = $this->valid_message;
+            $this->write_status($field_name, $this->valid_message);
             return (true);
         }
         else
         {
-            $response[$field_name] = $error_message;
+            $this->write_status($field_name, $error_message);
             return (false);
         }
     }
@@ -43,13 +105,12 @@ class FormController extends Controller
     /*
     ** Checks if the given field is a valid birth-date, ie user meets the age requirements
     **
-    ** @param Array &$response: the AJAX response
     ** @param string $field_name: the field to check
-    ** @param string $error_message: the error message to put in $response
+    ** @param string $error_message: the error message to write in status
     **
     ** @return bool: true is the date is valid, false otherwise
     */
-    public function check_birthdate_is_valid(Array &$response, string $field_name, string $error_message)
+    protected function date_is_valid(string $field_name, string $error_message)
     {
         $age = date_diff(
             new DateTime(),
@@ -58,12 +119,12 @@ class FormController extends Controller
 
         if ($age >= 18)
         {
-            $response[$field_name] = $this->valid_message;
+            $this->write_status($field_name, $this->valid_message);
             return (true);
         }
         else
         {
-            $response[$field_name] = $error_message;
+            $this->write_status($field_name, $error_message);
             return (false);
         }
     }
@@ -71,13 +132,12 @@ class FormController extends Controller
     /*
     ** Checks if the given field is a valid mail address
     **
-    ** @param Array &$response: the AJAX response
     ** @param string $field_name: the field to check
-    ** @param string $error_message: the error message to put in $response
+    ** @param string $error_message: the error message to write in status
     **
     ** @return bool: true is the mail is valid, false otherwise
     */
-    public function check_valid_mail(Array &$response, string $field_name, string $error_message)
+    protected function mail_is_valid(string $field_name, string $error_message)
     {
         $valid_mail = preg_match(
             '/[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+.[a-zA-Z]{2,4}/',
@@ -85,12 +145,12 @@ class FormController extends Controller
         );
         if ($valid_mail)
         {
-            $response[$field_name] = $this->valid_message;
+            $this->write_status($field_name, $this->valid_message);
             return (true);
         }
         else
         {
-            $response[$field_name] = $error_message;
+            $this->write_status($field_name, $error_message);
             return (false);
         }
     }
@@ -100,15 +160,14 @@ class FormController extends Controller
     **      - lowercase,
     **      - uppercase,
     **      - digits,
-    **      - symbols ()
+    **      - symbols (!@#$%^&)
     **
-    ** @param Array &$response: the AJAX response
     ** @param string $field_name: the field to check
-    ** @param string $error_message: the error message to put in $response
+    ** @param string $error_message: the error message to write in status
     **
     ** @return bool: true is the password is strong enough, false otherwise
     */
-    public function check_password_strength(Array &$response, string $field_name, string $error_message)
+    protected function password_is_strong_enough(string $field_name, string $error_message)
     {
         $regex_patterns = [
             '/[a-z]/',
@@ -126,37 +185,48 @@ class FormController extends Controller
         }
         if ($strong_enough)
         {
-            $response[$field_name] = $this->valid_message;
+            $this->write_status($field_name, $this->valid_message);
             return (true);
         }
         else
         {
-            $response[$field_name] = $error_message;
+            $this->write_status($field_name, $error_message);
             return (false);
         }
     }
 
     /*
-    ** Checks if the given field in filled in $_POST
+    ** Checks if 2 fields have the same value
     **
-    ** @param Array &$response: the AJAX response
-    ** @param string $field_name: the field to check
-    ** @param string $error_message: the error message to put in $response
+    ** @param string $first_field: the first field name to compare
+    ** @param string $second_field: the second field name to compare with
+    ** @param string $error_message: the error message to write in status
     **
-    ** @return bool: true is the field was filled, false otherwise
+    ** @return bool: true fields match, false otherwise
     */
-    public function check_passwords_match(Array &$response, string $pwd_field, string $pwd_conf_field, string $error_message)
+    protected function fields_match(string $first_field, string $second_field, string $error_message)
     {
-        if ($_POST[$pwd_field] === $_POST[$pwd_conf_field])
+        if ($_POST[$first_field] === $_POST[$second_field])
         {
-            $response[$pwd_conf_field] = $this->valid_message;
+            $this->write_status($second_field, $this->valid_message);
             return (true);
         }
         else
         {
-            $response[$pwd_conf_field] = $error_message;
+            $this->write_status($second_field, $error_message);
             return (false);
         }
+    }
+
+    /*
+    ** Writes a message in the server response if not null
+    **
+    ** @param string $field_name: the name of the field to write status for
+    ** @param string $status: the message to write in status for the selected field
+    */
+    private function write_status(string $field_name, string $status)
+    {
+        $this->status[$field_name] = $status;
     }
 }
 

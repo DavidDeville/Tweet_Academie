@@ -43,6 +43,20 @@ class UserModel extends Model
     /*
     ** Checks whether or not the user exists in the database
     **
+    ** @param string $account_name: the account name to search in the database
+    **
+    ** @return bool: false if the account was found in database, true otherwise
+    */
+    public function account_is_available(string $account_name)
+    {
+        return (
+            ! $this->account_exists($account_name)
+        );
+    }
+
+    /*
+    ** Checks whether or not the user exists in the database
+    **
     ** @param string $mail: the mail to search in the database
     **
     ** @return bool: true if the mail was found in database, false otherwise
@@ -57,6 +71,20 @@ class UserModel extends Model
         ]);
         return (
             $mail_query->rowCount() > 0
+        );
+    }
+
+    /*
+    ** Checks whether or not the user exists in the database
+    **
+    ** @param string $mail: the mail to search in the database
+    **
+    ** @return bool: false if the mail was found in database, true otherwise
+    */
+    public function mail_is_available(string $mail)
+    {
+        return (
+            ! $this->mail_exists($mail)
         );
     }
 
@@ -129,7 +157,6 @@ class UserModel extends Model
             ':birth_date' => $_POST['signup-dob'],
             ':city' => $_POST['signup-city']
         ]);
-        
     }
 
     /*

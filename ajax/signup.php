@@ -6,88 +6,48 @@
 ** Returns a JSON object where attributes names are
 ** form fields, and attributes values are error messages if any, 'Valid' otherwise
 **
-** Please note that any key added in $answer will be treated in the calling
+** Please note that any status in form will be treated in the calling
 ** javascript, so to not give informations about some fields under certain 
-** conditions, don't add them in $response
+** conditions, don't add them
 ** Here, nothing will be shown about password confirmation unless password is valid
 */
 
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 
-require_once '../controller/FormController.class.php';
+require_once '../controller/FormSignUpController.class.php';
 require_once '../model/UserModel.class.php';
 
-$response = [];
 $user = new UserModel();
-$form = new FormController();
+$form = new FormSignUpController();
 
-$form->check_field_is_filled(
-    $response,
-    'signup-username',
-    'Please enter your username'
-);
+$form->is_valid();
 
-if($form->check_field_is_filled(
-    $response,
-    'signup-accname',
-    'Please enter your account name'
-))
+/*
+** ID of fields in the form
+*/
+$account = 'signup-accname';
+$mail = 'signup-mail';
+
+// Only check if account is available if a valid name has been entered
+if ($form->field_is_valid($account))
 {
-    if ($user->account_exists('signup-accname'))
+    if ($user->account_exists($_POST[$account]))
     {
-        $response['signup-accname'] = 'This account name is already used';
-    }
-    else
-    {
-        $response['signup-accname'] = 'valid';
+        $form->set_state($account, 'That account name is already in use');
     }
 }
 
-$form->check_birthdate_is_valid(
-    $response,
-    'signup-dob',
-    'You must be at least 18 years old to sign-up'
-);
-
-$form->check_field_is_filled(
-    $response,
-    'signup-city',
-    'Please enter your city'
-);
-
-if ($form->check_valid_mail(
-    $response,
-    'signup-mail',
-    'Please enter a valid mail address'
-))
+// Only check if mail is available if a valid address has been entered
+if ($form->field_is_valid($mail))
 {
-    if ($user->mail_exists($_POST['signup-mail']))
+    if ($user->mail_exists($_POST[$mail]))
     {
-        $response['signup-mail'] = 'That mail address is already in use';
+        $form->set_state($mail, 'That mail address is already bound to an account');
     }
-    else
-    {
-        $response['signup-mail'] = 'valid';
-    }
-}
-
-if($form->check_password_strength(
-    $response,
-    'signup-pwd',
-    'Your password is too weak, it must contain lowercase, uppercase, ' . 
-    'digits and symbols (!@#$%^&amp;)'
-))
-{
-    $form->check_passwords_match(
-        $response,
-        'signup-pwd',
-        'signup-pwdcheck',
-        'Passwords don\'t match'
-    );
 }
 
 echo json_encode(
-    $response
+    $form->status()
 );
 
 ?>
