@@ -359,6 +359,8 @@ class UserModel extends Model
 
     /*
     ** Makes the connected user follow someone else if he's not already following him
+    **
+    ** @param string $account_name: the name of the account to follow
     */
     public function follow(string $account_name)
     {
@@ -385,6 +387,10 @@ class UserModel extends Model
 
     /*
     ** Checks if the connected user followed the specified user
+    **
+    ** @param int $target_id: the ID of the account to check for following
+    **
+    ** @return bool: true if the connected user follows the target ID, false otherwise
     */
     private function follows(int $target_id)
     {
