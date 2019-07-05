@@ -363,11 +363,19 @@ class UserModel extends Model
     public function follow(string $account_name)
     {
         $follow_query = $this->link->prepare(
-            'INSERT INTO follower (user_id, follower_id, follow_date) VALUES (:user_id, :follower_id, NOW())'
+            'INSERT INTO follower (
+                user_id, 
+                follower_id_id, 
+                follow_date
+            ) VALUES (
+                :user_id, 
+                :follower_id, 
+                NOW()
+            )'
         );
         $follow_query->execute([
-            ':user_id' => 1, 
-            ':follower_id' => 3
+            ':user_id' => $this->get_infos($account_name)['id'], 
+            ':follower_id' => $this->get_account_id()
         ]);
     }
 
