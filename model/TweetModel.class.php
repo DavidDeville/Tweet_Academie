@@ -80,7 +80,8 @@ class TweetModel extends Model
     public function get_tweet(int $id)
     {
         $get_tweet_query = $this->link->prepare(
-            'SELECT sender_id,
+            'SELECT id,
+            sender_id,
             content,
             submit_time
             FROM post
@@ -212,7 +213,7 @@ class TweetModel extends Model
         );
 
         $get_likes_query->execute([
-            'post_id' => $post_id
+            ':post_id' => $post_id
         ]);
 
         return(
@@ -221,7 +222,7 @@ class TweetModel extends Model
     }
 
     /*
-    ** Function to get the number of likes of a tweet
+    ** Function to get the id of the likers of a tweet
     **
     ** @param int $user_id: id of the user that liked the tweet
     **
@@ -237,7 +238,7 @@ class TweetModel extends Model
         );
 
         $get_likers_query->execute([
-            'post_id' => $post_id
+            ':post_id' => $post_id
         ]);
 
         return(
@@ -248,15 +249,34 @@ class TweetModel extends Model
     /*
     ** Function to repost a tweet
     **
-    ** @param int $id: id of the original tweet
+    ** @param int $sender_id: id of the person sending the tweet
     **
-    ** @param int: id of the retweeting user
+    ** @param int $source_id: id of the original tweet
     */
 
     public function repost(int $sender_id, int $source_id)
     {
         $source = $this->get_tweet($source_id);
 
+        $repost_query = $this->link->prepare(
+            'INSERT INTO post (
+                sender_id,
+                source_post_id, 
+                content,
+                submit_time
+            ) VALUES (
+                :sender_id,
+                :source_post_id,
+                :content,
+                NOW()
+            )'
+        );
+
+        $repost_query->execute([
+            ':sender_id' => $sender_id,
+            ':source_post_id' => $source['id'],
+            ':content' => $source['content']
+        ]);
     }
 }
 ?>
