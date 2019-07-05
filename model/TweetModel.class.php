@@ -172,13 +172,58 @@ class TweetModel extends Model
     /*
     ** Function to like a tweet
     **
-    ** @param int $id: id of the tweet to update
+    ** @param int $user_id: id of the user that liked the tweet
+    **
+    ** @param int $post_id: id of the liked tweet
+    */
+
+    public function like(int $user_id, int $post_id)
+    {
+        $like_tweet_query = $this->link->prepare(
+            'INSERT INTO favorite (
+                user_id, 
+                post_id
+            ) VALUES (
+                :user_id,
+                :post_id
+            )'
+        );
+
+        $like_tweet_query->execute([
+            ':user_id' => $user_id,
+            ':post_id' => $post_id
+        ]);
+    }
+
+    /*
+    ** Function to like a tweet
     **
     ** @param int $user_id: id of the user that liked the tweet
     **
     ** @param int $post_id: id of the liked tweet
     */
 
-    
+    public function get_likes(int $post_id)
+    {
+        $get_likes_query = $this->link->prepare(
+            'SELECT COUNT(id)
+            FROM favorite
+            WHERE post_id = :post_id'
+        );
+
+        $get_likes_query->execute([
+            'post_id' => $post_id
+        ]);
+
+        var_dump(
+            $get_likes_query->fetchAll(PDO::FETCH_ASSOC)
+        );
+    }
+
+    // public function repost(int $sender_id, int $source_id)
+    // {
+    //     $source = $this->get_tweet($source_id);
+
+    // }
 }
 ?>
