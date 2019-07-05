@@ -37,7 +37,7 @@
             <div class="row">
                 <div class="card-header col-7 bg-primary border-0 text-info">Let's Tweet</div>
                 <div class="input-group-text col-1 bg-primary border-0 text-light rounded-0" id="tweet-send" type="button">Send Tweet</div>
-                <textarea class="form-control col-8 bg-primary border-0 rounded-0 text-light">Some quick example text to build on the card title and make up the bulk of the card's content.</textarea>
+                <textarea class="form-control col-8 bg-primary border-0 rounded-0 text-light" placeholder="Some quick example text to build on the card title and make up the bulk of the card's content."></textarea>
             </div>
         </div>
     </div>
@@ -48,26 +48,26 @@
                 <div class="list-group">
                     <div class="list-group-item list-group-item-action flex-column align-items-start active">
                         <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Tweet by {{ account_name }}</h5>
+                        <h5 class="mb-1">@{{ account_name }}</h5>
                         <small>Posted : 3 days ago</small>
                         </div>
                         {% for tweet in tweets %}
                             {% if tweet.current_user %}
                                 <p class="mb-1">{{ tweet.current_user_tweet }}</p>
-                                <small>Reply</small>
-                                <small>Retweet</small>
-                                <small>Like</small>
+                                <small type="button" id="reply"><i class="fas fa-reply"></i></small>
+                                <small type="button" id="retweet"><i class="fas fa-retweet"></i></small>
+                                <small type="button" id="like"><i class="fas fa-heart"><span class="badge badge-light">1664</span></i></small>
                         </div>
                             {% else %}
                             <div class="list-group-item list-group-item-action flex-column align-items-start mt-2">
                                 <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Tweet by {{ tweet.current_user }}</h5>
+                                <h5 class="mb-1">@{{ tweet.other_user }}</h5>
                                 <small class="text-muted">Posted 3 : days ago</small>
                                 </div>
                                 <p class="mb-1">{{ tweet.member_tweet }}</p>
-                                <small class="text-muted">Reply</small>
-                                <small class="text-muted">Retweet</small>
-                                <small class="text-muted">Like</small>
+                                <small type="button" id="reply"><i class="fas fa-reply"></i></small>
+                                <small type="button" id="retweet"><i class="fas fa-retweet"></i></small>
+                                <small type="button" id="like"><i class="fas fa-heart"><span class="badge badge-light">1664</span></i></small>
                             </div>
                             {% endif %}
                         {% endfor %}
