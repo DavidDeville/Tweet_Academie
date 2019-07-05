@@ -101,7 +101,7 @@ class TweetModel extends Model
     **
     ** @param int $sender_id: id of the user sending tweets
     **
-    ** @return array: all tweets of specified user
+    ** @return array: all tweets of logged user
     */
     public function by_user(int $sender_id)
     {
@@ -127,7 +127,7 @@ class TweetModel extends Model
     **
     ** @param array $following_ids: ids of person you're currently following
     **
-    ** @return 
+    ** @return array: all tweets of followed users
     */
 
     public function for_user(Array $following_ids)
@@ -196,11 +196,11 @@ class TweetModel extends Model
     }
 
     /*
-    ** Function to like a tweet
-    **
-    ** @param int $user_id: id of the user that liked the tweet
+    ** Function to get the number of likes of a tweet
     **
     ** @param int $post_id: id of the liked tweet
+    **
+    ** @return array: number of likes
     */
 
     public function get_likes(int $post_id)
@@ -215,15 +215,48 @@ class TweetModel extends Model
             'post_id' => $post_id
         ]);
 
-        var_dump(
+        return(
             $get_likes_query->fetchAll(PDO::FETCH_ASSOC)
         );
     }
 
-    // public function repost(int $sender_id, int $source_id)
-    // {
-    //     $source = $this->get_tweet($source_id);
+    /*
+    ** Function to get the number of likes of a tweet
+    **
+    ** @param int $user_id: id of the user that liked the tweet
+    **
+    ** @return array: id of the likers
+    */
 
-    // }
+    public function get_likers(int $post_id)
+    {
+        $get_likers_query = $this->link->prepare(
+            'SELECT user_id
+            FROM favorite
+            WHERE post_id = :post_id'
+        );
+
+        $get_likers_query->execute([
+            'post_id' => $post_id
+        ]);
+
+        return(
+            $get_likers_query->fetchAll(PDO::FETCH_ASSOC)
+        );
+    }
+
+    /*
+    ** Function to repost a tweet
+    **
+    ** @param int $id: id of the original tweet
+    **
+    ** @param int: id of the retweeting user
+    */
+
+    public function repost(int $sender_id, int $source_id)
+    {
+        $source = $this->get_tweet($source_id);
+
+    }
 }
 ?>
