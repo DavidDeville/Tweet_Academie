@@ -365,7 +365,11 @@ class UserModel extends Model
     public function follow(string $account_name)
     {
         $target_id = $this->get_infos($account_name)['id'];
-        if (! $this->follows($target_id))
+        if ($this->follows($target_id))
+        {
+            return (false);
+        }
+        else
         {
             $follow_query = $this->link->prepare(
                 'INSERT INTO follower (
@@ -383,6 +387,7 @@ class UserModel extends Model
                 ':follower_id' => $this->get_account_id()
             ]);
         }
+        return (true);
     }
 
     /*
