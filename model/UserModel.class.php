@@ -374,7 +374,7 @@ class UserModel extends Model
             $follow_query = $this->link->prepare(
                 'INSERT INTO follower (
                     user_id, 
-                    follower_id_id, 
+                    follower_id, 
                     follow_date
                 ) VALUES (
                     :user_id, 
@@ -404,7 +404,7 @@ class UserModel extends Model
             FROM follower
             WHERE 
                 user_id = :target_id &&
-                follower_id_id = :follower_id'
+                follower_id = :follower_id'
         );
         $follow_query->execute([
             ':target_id' => $target_id,
@@ -427,7 +427,7 @@ class UserModel extends Model
             FROM follower 
                 INNER JOIN user 
                     ON follower.user_id = user.id 
-            WHERE follower_id_id = :follower_id'
+            WHERE follower_id = :follower_id'
         );
         $followings_query->execute([
             ':follower_id' => $this->get_account_id()
