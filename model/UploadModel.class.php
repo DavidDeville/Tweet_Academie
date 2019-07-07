@@ -65,20 +65,27 @@ final class UploadModel extends Model
     */
     public function user_profile(int $user)
     {
-        $upload_query = $this->link->perpare(
-            'SELECT path
-            FROM upload
-            WHERE 
-                uploader_id = :user &&
-                type = :type'
-        );
-        $upload_query->execute([
-            ':user' => $user,
-            ':type' => $this->types[$this::PROFILE]
-        ]);
-        return (
-            $upload_query->fetch(PDO::FETCH_ASSOC)
-        );
+        if ($this->user_has_profile($user))
+        {
+            $upload_query = $this->link->prepare(
+                'SELECT path
+                FROM upload
+                WHERE 
+                    uploader_id = :user &&
+                    type = :type'
+            );
+            $upload_query->execute([
+                ':user' => $user,
+                ':type' => $this->types[$this::PROFILE]
+            ]);
+            return (
+                $upload_query->fetch(PDO::FETCH_ASSOC)['path']
+            );
+        }
+        else
+        {
+            return (false);
+        }
     }
 
     /* 
@@ -90,20 +97,27 @@ final class UploadModel extends Model
     */ 
     public function user_banner(int $user)
     {
-        $upload_query = $this->link->perpare(
-            'SELECT path
-            FROM upload
-            WHERE 
-                uploader_id = :user &&
-                type = :type'
-        );
-        $upload_query->execute([
-            ':user' => $user,
-            ':type' => $this->types[$this::BANNER]
-        ]);
-        return (
-            $upload_query->fetch(PDO::FETCH_ASSOC)
-        );
+        if ($this->user_has_banner($user))
+        {
+            $upload_query = $this->link->prepare(
+                'SELECT path
+                FROM upload
+                WHERE 
+                    uploader_id = :user &&
+                    type = :type'
+            );
+            $upload_query->execute([
+                ':user' => $user,
+                ':type' => $this->types[$this::BANNER]
+            ]);
+            return (
+                $upload_query->fetch(PDO::FETCH_ASSOC)['path']
+            );
+        }
+        else
+        {
+            return (false);
+        }
     }
 
     /*
