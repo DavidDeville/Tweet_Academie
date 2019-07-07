@@ -427,7 +427,7 @@ class UserModel extends Model
             FROM follower 
                 INNER JOIN user 
                     ON follower.user_id = user.id 
-            WHERE follower_id = :follower_id'
+            WHERE follower_id_id = :follower_id'
         );
         $followings_query->execute([
             ':follower_id' => $this->get_account_id()

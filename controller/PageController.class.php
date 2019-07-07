@@ -1,33 +1,67 @@
 <?php
 
+require_once 'vendor/autoload.php';
 require_once 'Controller.class.php';
 
 /*
 ** Base controller for pages
+** Decides which view to display and which actions to do
 */
 abstract class PageController extends Controller
-{
+{    
     /*
-    ** Redirects user if he's not connected and trying to visit something else than homepage
+    ** The list of pages non-connected users can see
     */
+    private $public_pages;
+
+    /*
+    ** The view renderer
+    */
+    protected $twig;
+
+    /*
+    ** Displays the appropriate view, depending on models and sub-controllers
+    ** Every sub-class has to define this
+    */ 
+    abstract public function display_view();
+
+    /*
+    ** Core of the page logic, every sub-class has to define this
+    ** Decides of which actions should be done
+    */
+    abstract public function handle_request();
+
     public function __construct()
+    {
+        $this->twig = new Twig_Environment(
+            new Twig_Loader_Filesystem(__DIR__ . '/../view')
+        );
+
+        $this->public_pages = ['index.php'];
+        $this->redirect();
+    }
+    
+    /*
+    ** Redirects the user if he's not connected and trying to visit something else than homepage
+    */
+    private function redirect()
     {
         $url = $_SERVER['SCRIPT_NAME'];
         $slash_pos = strrpos($url, '/');
         $url = substr($url, $slash_pos + 1);
 
-        if ((count($_SESSION) < 1) && ($url != 'index.php'))
+        if ((count($_SESSION) < 1) && (! in_array($url, $this->public_pages)))
         {
             header('location: index.php');
         }
-    }
+    } 
 
     /*
     ** Checks whether a form has been submited or not
     **
     ** @return bool: true if a form has been submited, false otherwise
     */
-    public function form_submited()
+    protected function form_submited()
     {
         return (
             count($_POST) > 0
@@ -48,18 +82,12 @@ abstract class PageController extends Controller
         if ($this->form_submited())
         {
             $key = array_keys($_POST)[0];
-            return (
-                strpos(
-                    $key, 
-                    $pattern
-                ) !== false
-            );
+            $match = (strpos($key, $pattern) !== false);
+            return ($match);
         }
         else
         {
-            return (
-                false
-            );
+            return (false);
         }
         
     }
