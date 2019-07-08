@@ -3,6 +3,16 @@
 */
 
 /*
+** Returns the current page with args
+*/
+const currentUrl = () =>
+{
+    return window.location.toString().substr(
+        window.location.toString().lastIndexOf('/') + 1
+    );
+};
+
+/*
 ** Returns an object of args in the URL
 */
 const urlParams = () =>

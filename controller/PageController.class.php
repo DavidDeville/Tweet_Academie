@@ -82,7 +82,7 @@ abstract class PageController extends Controller
         if ($this->form_submited())
         {
             $key = array_keys($_POST)[0];
-            $match = (strpos($key, $pattern) !== false);
+            $match = (strpos($key, $pattern) === 0);
             return ($match);
         }
         else

@@ -1,5 +1,7 @@
 <?php
 
+ini_set('display_errors', 1);
+
 require_once 'PageController.class.php';
 require_once 'model/UserModel.class.php';
 require_once 'FormProfileUpdateController.class.php';
@@ -42,6 +44,7 @@ final class ProfileController extends PageController
     */
     public function display_view()
     {
+        
         if ($this->requested_self_profile())
         {
             $this->display_self_profile();
@@ -57,9 +60,9 @@ final class ProfileController extends PageController
     **      @see PageController::handle_request()
     */
     public function handle_request()
-    {
+    {     
         if ($this->profile_updated())
-        {
+        { 
             if ($this->password_is_correct())
             {
                 if ($this->valid_mail())
@@ -80,9 +83,15 @@ final class ProfileController extends PageController
     */
     private function redirect_on_invalid_profile()
     {
-        $target = $_GET['account'];
-
-        if ($this->user->account_is_available($target))
+        if (isset($_GET['account']))
+        {
+            $target = $_GET['account'];
+            if ($this->user->account_is_available($target))
+            {
+                header('location: index.php');
+            }
+        }
+        else
         {
             header('location: index.php');
         }
@@ -97,7 +106,7 @@ final class ProfileController extends PageController
     {
         return (
             $this->user->password_match(
-                $_POST['info-email'], 
+                $this->user->get_mail(), 
                 $_POST['info-oldpwd']
             )
         );
@@ -111,7 +120,7 @@ final class ProfileController extends PageController
     */ 
     private function valid_mail()
     {
-        $is_old_mail = ($_POST['info-email'] === $this->user_get_mail());
+        $is_old_mail = ($_POST['info-email'] === $this->user->get_mail());
         $new_mail_available = (
             (! $is_old_mail) &&
             $this->user->mail_is_available($_POST['info-email'])
@@ -132,6 +141,7 @@ final class ProfileController extends PageController
         return (
             $_GET['account'] === $this->user->get_account_name()
         );
+        return (false);
     }
 
     /*

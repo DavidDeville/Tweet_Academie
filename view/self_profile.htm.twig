@@ -55,6 +55,8 @@
 {% endblock %}
 
 {% block javascript %}
+  {{ parent() }}
+  <script src='js/url.js'></script>
   <script src='js/forms.js'></script>
   <script src='js/selfProfile.js'></script>
 {% endblock %}

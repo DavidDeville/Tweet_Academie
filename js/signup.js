@@ -1,8 +1,3 @@
-const trololo = (response) =>
-{
-    console.log(response);
-};
-
 /*
 ** Sends an ajax request and determines if the form should be submited
 **
@@ -34,9 +29,7 @@ $('#signup-submit').click((event) =>
         {
             $.post(
                 'index.php',
-                form,
-                trololo,
-                'text'
+                form
             ).then(() =>
             {
                 $(location).attr('href', 'index.php');

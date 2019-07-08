@@ -303,55 +303,34 @@ class UserModel extends Model
     */
     public function update()
     {
-        $truc = $this->link->prepare(
-            'INSERT INTO user (
-                username, 
-                display_name,
-                email,
-                password
-            ) VALUES (
-                :accname,
-                :pseudo,
-                :mail,
-                :pass
-            )'
-        );
-        $truc->execute([
-            ':accname' => 'machin',
-            ':pseudo' => 'bidule',
-            ':mail' => 'couillon@hotmail.fr',
-            ':pass' => 'truc'
-        ]);
-        /*$correspondings = [
-            'info-email' => 'email',
-            'info-name' => 'display_name',
-            'info-city' => 'city',
-            'info-dob' => 'birth_date',
-            'info-pwd' => 'password'
-        ];
-        $update_query_string = 'UPDATE user SET ';
-        if ($_POST['info-pwd'] === '')
-        {
-            $_POST = array_diff($_POST, [$_POST['info-pwd']]);
-        }
-        if (isset($_POST['info-checkpwd']))
-        {
-            $_POST = array_diff($_POST, [$_POST['info-checkpwd']]);
-        }
-        $_POST = array_diff($_POST, [$_POST['info-oldpwd']]);
-        foreach (array_keys($_POST) as $user_info)
-        {
-            $update_query_string .= $correspondings[$user_info] . ' = "' . $_POST[$user_info] . '", ';
-        }
-        $update_query_string = substr($update_query_string, 0, strlen($update_query_string) - 2);
-        $update_query_string .= ' WHERE id = ' . $this->get_account_id();
         $update_query = $this->link->prepare(
-            $update_query_string
+            'UPDATE user 
+            SET
+                display_name = :pseudo,
+                email = :mail,
+                birth_date = :birthdate,
+                city = :city
+            WHERE id = :user_id'
         );
-        var_dump($_POST);
-        var_dump($update_query);
-        echo json_encode(['test' => 'trololo']);
-        $update_query->execute();*/
+        $update_query->execute([
+            ':pseudo' => $_POST['info-name'],
+            ':mail' => $_POST['info-email'],
+            ':birthdate' => $_POST['info-dob'],
+            ':city' => $_POST['info-city'],
+            ':user_id' => $this->get_account_id()
+        ]);
+        if (isset($_POST['info-pwd']) && $_POST['info-pwd'] !== '')
+        {
+            $update_query = $this->link->prepare(
+                'UPDATE user
+                SET password = :password
+                WHERE id = :user_id'
+            );
+            $update_query->execute([
+                ':password' => hash('ripemd160', $password . $this->hashSalt),
+                ':user_id' => $this->get_account_id()
+            ]);
+        }
     }
 
     /*
