@@ -469,10 +469,8 @@ class UserModel extends Model
     public function get_followings_id()
     {
         $followings_query = $this->link->prepare(
-            'SELECT id
+            'SELECT user_id
             FROM follower 
-                INNER JOIN user 
-                    ON follower.user_id = user.id 
             WHERE follower_id = :follower_id'
         );
         $followings_query->execute([
