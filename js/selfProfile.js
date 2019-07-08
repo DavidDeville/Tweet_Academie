@@ -1,4 +1,42 @@
 /*
+** Temporary debug function
+*/
+const trololo = (response) =>
+{
+    console.log(response);
+};
+
+/*
+** The image reader, required for both image selection and upload
+*/
+let reader = new FileReader();
+  
+/*
+** Reader has to be set on image selection, otherwise it's undefined
+*/ 
+$('#upload-file').change(() =>
+{
+    reader.readAsDataURL($('#upload-file')[0].files[0]);
+});
+
+/*
+** Ajax request to upload the image
+*/
+$('#upload-submit').click((event) =>
+{
+    event.preventDefault();
+
+    $.post(
+        'ajax/profile_upload.php',
+        {
+            'upload-file': reader.result
+        },
+        trololo,
+        'text'
+    );
+});
+
+/*
 ** Ajax request to upload profile forms
 */
 $('#submitinfo').click((event) =>
@@ -26,12 +64,11 @@ $('#submitinfo').click((event) =>
         if ($('#modifyinfo').find('.invalid-feedback').length === 0)
         {
             $.post(
-                'profile.php',
+                currentUrl(),
                 form
             ).then(() =>
             {
                 location.reload();
-                //console.log('formulaire envoyé');
             });
         }
     });

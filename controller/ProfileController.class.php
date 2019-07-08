@@ -200,7 +200,7 @@ final class ProfileController extends PageController
     {
         return (
             $this->form_matches(
-                'file'
+                'upload'
             )
         );
     }
