@@ -4,6 +4,7 @@ require_once 'PageController.class.php';
 require_once 'model/UserModel.class.php';
 require_once 'FormSignUpController.class.php';
 require_once 'FormSignInController.class.php';
+require_once 'model/TweetModel.class.php';
 
 /*
 ** Controller for index.php
@@ -14,6 +15,11 @@ final class IndexController extends PageController
     ** The user model
     */
     private $user;
+
+    /*
+    ** The tweet model
+    */
+    private $tweet;
 
     /*
     ** The sign-up form controller
@@ -32,6 +38,7 @@ final class IndexController extends PageController
         $this->user = new UserModel();
         $this->signup = new FormSignUpController();
         $this->signin = new FormSignInController();
+        $this->tweet = new TweetModel();
     }
 
     /*
@@ -110,8 +117,13 @@ final class IndexController extends PageController
     private function display_feed()
     {
         echo $this->twig->render(
-            'memberbase.htm.twig', [
-                'account_name' => $this->user->get_account_name()
+            'feed.htm.twig', [
+                'tweets' => $this->tweet->for_user(
+                    array_merge(
+                        $this->user->get_followings_id(),
+                        [['user_id' => $this->user->get_account_id()]]
+                    )
+                    )
         ]);
     }
 
