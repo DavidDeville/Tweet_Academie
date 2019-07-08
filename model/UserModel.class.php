@@ -303,7 +303,26 @@ class UserModel extends Model
     */
     public function update()
     {
-        $correspondings = [
+        $truc = $this->link->prepare(
+            'INSERT INTO user (
+                username, 
+                display_name,
+                email,
+                password
+            ) VALUES (
+                :accname,
+                :pseudo,
+                :mail,
+                :pass
+            )'
+        );
+        $truc->execute([
+            ':accname' => 'machin',
+            ':pseudo' => 'bidule',
+            ':mail' => 'couillon@hotmail.fr',
+            ':pass' => 'truc'
+        ]);
+        /*$correspondings = [
             'info-email' => 'email',
             'info-name' => 'display_name',
             'info-city' => 'city',
@@ -329,7 +348,10 @@ class UserModel extends Model
         $update_query = $this->link->prepare(
             $update_query_string
         );
-        $update_query->execute();
+        var_dump($_POST);
+        var_dump($update_query);
+        echo json_encode(['test' => 'trololo']);
+        $update_query->execute();*/
     }
 
     /*
@@ -424,6 +446,30 @@ class UserModel extends Model
     {
         $followings_query = $this->link->prepare(
             'SELECT username 
+            FROM follower 
+                INNER JOIN user 
+                    ON follower.user_id = user.id 
+            WHERE follower_id = :follower_id'
+        );
+        $followings_query->execute([
+            ':follower_id' => $this->get_account_id()
+        ]);
+        return (
+            $followings_query->fetchAll(
+                PDO::FETCH_ASSOC
+            )
+        );
+    }
+
+    /*
+    ** Returns the list of ID of people the connected user follows
+    **
+    ** @return Array: the list of people (usernames) the connected user follows
+    */
+    public function get_followings_id()
+    {
+        $followings_query = $this->link->prepare(
+            'SELECT id
             FROM follower 
                 INNER JOIN user 
                     ON follower.user_id = user.id 
