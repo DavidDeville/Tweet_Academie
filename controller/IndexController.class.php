@@ -118,12 +118,13 @@ final class IndexController extends PageController
     {
         echo $this->twig->render(
             'feed.htm.twig', [
+                'account_name' => $this->user->get_account_name(),
                 'tweets' => $this->tweet->for_user(
                     array_merge(
                         $this->user->get_followings_id(),
                         [['user_id' => $this->user->get_account_id()]]
                     )
-                    )
+                )
         ]);
     }
 

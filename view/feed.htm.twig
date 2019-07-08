@@ -2,45 +2,19 @@
 
 {% block title %}TweetAcademie Feed{% endblock %}
 
-{% block nav %}
-  <nav class='navbar navbar-expand-lg navbar-dark bg-primary'>
-    <a class='navbar-brand' href='#'>Tweet Académie</a>
-    <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarColor01' aria-controls='navbarColor01' aria-expanded='false' aria-label='Toggle navigation'>
-      <span class='navbar-toggler-icon'></span>
-    </button>
-
-    <div class='collapse navbar-collapse' id='navbarColor01'>
-      <ul class='navbar-nav mr-auto'>
-        <li class='nav-item active'>
-          <a class='nav-link' href='#'>Home Page<span class='sr-only'>(current)</span></a>
-        </li>
-        <li class='nav-item'>
-          <a class='nav-link' href='#'>Messages</a>
-        </li>
-        <li class='nav-item'>
-          <a class='nav-link' href='profile.php?account={{ account_name }}'>{{ account_name }}</a>
-        </li>
-        <li class='nav-item'>
-          <a class='nav-link' href='logout.php'>Log Out</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <button id='theme' class='btn btn-secondary align-items-center'>Theme : </button>
-
-{% endblock %}
 
 {% block body %}
-    <div class="d-flex justify-content-end">
-        <div class="mt-3 col-9">
-            <div class="row">
-                <div class="card-header col-7 bg-primary border-0 text-info">Let's Tweet</div>
-                <div class="input-group-text col-1 bg-primary border-0 text-light rounded-0" id="tweet-send" type="button">Send Tweet</div>
-                <textarea class="form-control col-8 bg-primary border-0 rounded-0 text-light" placeholder="Some quick example text to build on the card title and make up the bulk of the card's content."></textarea>
-            </div>
-        </div>
-    </div>
+    <form id ="tweet">
+      <div class="d-flex justify-content-end">
+          <div class="mt-3 col-9">
+              <div class="row">
+                  <div class="card-header col-7 bg-primary border-0 text-info">Let's Tweet</div>
+                  <div class="input-group-text col-1 bg-primary border-0 text-light rounded-0" id="tweet-send" type="button">Send Tweet</div>
+                  <textarea class="form-control col-8 bg-primary border-0 rounded-0 text-light" placeholder="Type your tweet..." id="tweet-content"></textarea>
+              </div>
+          </div>
+      </div>
+    </form>
     <div class="d-flex justify-content-center">
         <div class="col-6">
             <div class="jumbotron mt-2">
@@ -57,12 +31,15 @@
                             <small type="button" id="retweet"><i class="fas fa-retweet"></i></small>
                             <small type="button" id="like"><i class="fas fa-heart"><span class="badge badge-light">1664</span></i></small>
                         </div>
-                        {% endfor %}
-                </div>
+                  </div>
+            {% endfor %}
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block javascript %}
+  {{ parent() }}
+  <script src='js/forms.js'></script>
+  <script src='js/tweet.js'></script>
 {% endblock %}
