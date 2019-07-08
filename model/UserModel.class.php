@@ -319,18 +319,40 @@ class UserModel extends Model
             ':city' => $_POST['info-city'],
             ':user_id' => $this->get_account_id()
         ]);
-        if (isset($_POST['info-pwd']) && $_POST['info-pwd'] !== '')
+        if ($_POST['info-pwd'] !== '')
         {
-            $update_query = $this->link->prepare(
-                'UPDATE user
-                SET password = :password
-                WHERE id = :user_id'
-            );
-            $update_query->execute([
-                ':password' => hash('ripemd160', $password . $this->hashSalt),
-                ':user_id' => $this->get_account_id()
-            ]);
+            $this->update_password($_POST['info-pwd']);
         }
+        $this->update_session();
+    }
+
+    /*
+    ** Updates the user password
+    **
+    ** @param string $password: the new password for the user, non hashed
+    */
+    private function update_password(string $password)
+    {
+        $password_query = $this->link->prepare(
+            'UPDATE user
+            SET password = :password
+            WHERE id = :user_id'
+        );
+        $password_query->execute([
+            ':password' => hash('ripemd160', $password . $this->hashSalt),
+            ':user_id' => $this->get_account_id()
+        ]);
+    }
+
+    /*
+    ** Updates the session variables for the user from the form on his profile
+    */
+    private function update_session()
+    {
+        $_SESSION['pseudo'] = $_POST['info-name'];
+        $_SESSION['email'] = $_POST['info-email'];
+        $_SESSION['birth-date'] = $_POST['info-dob'];
+        $_SESSION['city'] = $_POST['info-city'];
     }
 
     /*
