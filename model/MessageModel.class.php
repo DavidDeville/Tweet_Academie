@@ -33,7 +33,7 @@ class MessageModel extends Model
   **
   ** @return Array $user_convs: contains all of the user's convs
   */
-  private function get_all_convs(int $id_user)
+  public function get_all_convs(int $id_user)
   {
     $user_convs = $this->link->prepare(
       'SELECT chat_conversation_id
@@ -185,7 +185,7 @@ class MessageModel extends Model
   **
   ** @return Array: the list of members ID of the conversation
   */
-  private function get_conversation_members(int $conv_id)
+  public function get_conversation_members(int $conv_id)
   {
     $members = [];
     $members_query = $this->link->prepare(
@@ -203,6 +203,36 @@ class MessageModel extends Model
     }
     return (
       $members
+    );
+  }
+
+
+  /*
+  ** Gets all the conv's messages
+  **
+  ** @param int $id_conv: The id where we search the messages
+  **
+  ** @return Array: The senders' id and content of the messages
+  */
+  public function content_conv(int $id_conv)
+  {
+    $messages = $this->link->prepare(
+      'SELECT user.username,
+      user.display_name,
+      chat_message.content
+      FROM user
+      INNER JOIN chat_message
+      ON user.id = chat_message.sender_id
+      WHERE conversation_id = :id_conv
+      ORDER BY submit_time'
+    );
+    $messages->execute([
+      ':id_conv' => $id_conv
+    ]);
+    return(
+      $messages->fetchAll(
+        PDO::FETCH_ASSOC
+      )
     );
   }
 }

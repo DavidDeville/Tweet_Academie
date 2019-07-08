@@ -133,14 +133,22 @@ class TweetModel extends Model
 
     public function for_user(Array $following_ids)
     {
-        // Récupérer tous les tweets postés par ceux qui sont dans $following_ids
-        $following_list = "(" . implode(",", $following_ids) . ")";
+        $following_list = '(';
+        foreach ($following_ids as $following)
+        {
+            $following_list .= $following['user_id'] . ',';
+            echo 'current state: ' . $following_list;
+        }
+        $following_list = substr($following_list, 0, strlen($following_list) - 1);
+        $following_list .= ')';
         
         $get_followers_tweets = $this->link->prepare(
             'SELECT 
-                id, 
-                content
-            FROM post
+                display_name AS author,
+                username as author_account,
+                content,
+                submit_time
+            FROM post INNER JOIN user ON user.id = post.sender_id
             WHERE sender_id IN ' . $following_list
         );
         $get_followers_tweets->execute();
@@ -277,6 +285,34 @@ class TweetModel extends Model
             ':source_post_id' => $source['id'],
             ':content' => $source['content']
         ]);
+    }
+
+    /*
+    ** Function to get tweets by Hashtag
+    **
+    ** @param string $content: content of the tweets containing a specific hashtag
+    **
+    ** @return array: all tweets containing the hashtag
+    */
+
+    public function hashtag(string $hashtag)
+    {
+        $tweets_by_hashtag_query = $this->link->prepare(
+            'SELECT id,
+            sender_id,
+            content,
+            submit_time
+            FROM post
+            WHERE content LIKE :hashtag'
+        );
+
+        $tweets_by_hashtag_query->execute([
+            ':hashtag' => '%' . $hashtag . '%'
+        ]);
+
+        return(
+            $tweets_by_hashtag_query->fetchAll(PDO::FETCH_ASSOC)
+        );
     }
 }
 ?>

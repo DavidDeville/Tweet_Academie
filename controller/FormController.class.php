@@ -90,7 +90,7 @@ abstract class FormController extends Controller
     */
     protected function field_is_filled(string $field_name, string $error_message)
     {
-        if (strlen($_POST[$field_name]) >= 2)
+        if (strlen($_POST[$field_name]) >= 1)
         {
             $this->write_status($field_name, $this->valid_message);
             return (true);
