@@ -1,12 +1,4 @@
 /*
-** Temporary debug function
-*/
-const trololo = (response) =>
-{
-    console.log(response);
-};
-
-/*
 ** The image reader, required for both image selection and upload
 */
 let reader = new FileReader();
@@ -20,20 +12,33 @@ $('#upload-file').change(() =>
 });
 
 /*
-** Ajax request to upload the image
+** Ajax request to upload the profile picture
 */
 $('#upload-submit').click((event) =>
 {
     event.preventDefault();
 
+    let filename = $('#upload-file').val();
+    filename = filename.substr(filename.lastIndexOf('\\') + 1);
+
+    const form = 
+    {
+        'upload-file': reader.result,
+        'upload-name': filename
+    };
+
     $.post(
         'ajax/profile_upload.php',
-        {
-            'upload-file': reader.result
-        },
-        trololo,
-        'text'
-    );
+        form,
+        treatAjaxFormResponse,
+        'json'
+    ).then(() =>
+    {
+        $.post(
+            currentUrl(),
+            form
+        );
+    });
 });
 
 /*
@@ -73,3 +78,5 @@ $('#submitinfo').click((event) =>
         }
     });
 });
+
+//$('<div>ERROR</div>').addClass('invalid-feedback').insertAfter($('#upload-file'));

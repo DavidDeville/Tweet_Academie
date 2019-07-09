@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 
 require_once 'PageController.class.php';
 require_once 'model/UserModel.class.php';
+require_once 'model/UploadModel.class.php';
 require_once 'FormProfileUpdateController.class.php';
 require_once 'FormProfileUploadController.class.php';
 
@@ -23,6 +24,11 @@ final class ProfileController extends PageController
     private $update;
 
     /*
+    ** The upload model
+    */
+    private $uploadModel;
+
+    /*
     ** The picture-upload form controller
     */
     private $upload;
@@ -32,9 +38,10 @@ final class ProfileController extends PageController
         parent::__construct();
 
         $this->user = new UserModel();
-        $this->signup = new FormProfileUpdateController();
-        $this->signin = new FormProfileUploadController();
-        
+        $this->update = new FormProfileUpdateController();
+        $this->upload = new FormProfileUploadController();
+        $this->uploadModel = new UploadModel();
+
         $this->redirect_on_invalid_profile();
     }
 
@@ -63,17 +70,77 @@ final class ProfileController extends PageController
     {     
         if ($this->profile_updated())
         { 
-            if ($this->password_is_correct())
+            if ($this->update->is_valid)
             {
-                if ($this->valid_mail())
+                if ($this->password_is_correct())
                 {
-                    $this->user->update();
+                    if ($this->valid_mail())
+                    {
+                        $this->user->update();
+                    }
                 }
             }
+            
         }
         else if ($this->picture_uploaded())
         {
-            // TODO
+            if ($this->upload->is_valid())
+            {
+                $this->upload_image();
+            }
+        }
+    }
+
+    /*
+    ** Stores the uploaded image (from upload form) to the image directory
+    ** on the server, and ensure the target directory exists
+    */
+    private function upload_image()
+    {
+        $this->create_directory('uploads', 'profile');
+
+        $image_data = explode(',', $_POST['upload-file']);
+        $image_format = $image_data[0];
+        $image_extension = substr($image_format, strpos($image_format, '/') + 1);
+        $image_extension = substr($image_extension, 0, strpos($image_extension, ';'));
+        $image_content = $image_data[1];
+        $image_path = 'uploads/profile/' . $this->user->get_account_name() . '.' . $image_extension;
+        
+        $current_profile = $this->uploadModel->user_profile($this->user->get_account_id());
+        if ($current_profile !== false)
+        {
+            unlink($current_profile);
+        }
+        $image_stream = fopen(
+            $image_path,
+            'wb'
+        );
+        fwrite($image_stream, base64_decode($image_content));
+        fclose($image_stream);
+
+        $this->uploadModel->new(
+            $this->user->get_account_id(),
+            $image_path,
+            UploadModel::PROFILE
+        );
+    }
+
+    /*
+    ** Creates the given directory if it doesn't already exist
+    **
+    ** @param string $path: where to create the directory
+    ** @param string $name: the directory to create inside $path
+    */
+    private function create_directory(string $path, string $name)
+    {
+        if ((! file_exists($path)) || (! is_dir($path)))
+        {
+            mkdir($path);
+        }
+        $target = $path . '/' . $name;
+        if ((! file_exists($target)) || (! is_dir($target)))
+        {
+            mkdir($target);
         }
     }
 
