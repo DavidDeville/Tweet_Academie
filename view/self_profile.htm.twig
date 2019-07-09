@@ -25,8 +25,8 @@
 
   <div class='col-6'>
     <form id='upload' class='mr-3 ml-3' enctype='multipart/form-data'>
-      {% if VARIABLE == TRUE %}
-        <img id='profilepic' src='{{ PATH_TO_IMAGE }}' alt='Profile picture'>
+      {% if profile_picture == TRUE %}
+        <img id='profilepic' src='{{ profile_picture }}' alt='Profile picture'>
       {% else %}
         <img class='d-flex mx-auto' src='https://www.flynz.co.nz/wp-content/uploads/profile-placeholder.png' alt='Your future profile picture' width='600px' height='600px'>
       {% endif %}

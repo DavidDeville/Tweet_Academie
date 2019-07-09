@@ -217,6 +217,7 @@ final class ProfileController extends PageController
     private function display_self_profile()
     {
         echo $this->twig->render('self_profile.htm.twig', [
+            'profile_picture' => $this->uploadModel->user_profile($this->user->get_account_id()),
             'followers' => $this->user->get_followers(),
             'followings' => $this->user->get_followings(),
             'account_name' => $this->user->get_account_name(),
@@ -235,6 +236,7 @@ final class ProfileController extends PageController
         $target = $this->user->get_infos($_GET['account']);
         
         echo $this->twig->render('profile.htm.twig', [
+            'profile_picture' => $this->uploadModel->user_profile($target['id']),
             'account_name' => $this->user->get_account_name(),
             'target_name' => $target['display_name'],
             'email' => $target['email'],
