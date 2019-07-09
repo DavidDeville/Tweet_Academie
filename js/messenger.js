@@ -7,13 +7,15 @@ const refresh = () =>
 {
   $.post(
     'ajax/refresh.php',
-    {id_msg: ...},
+    {
+      id_msg: $('.jumbotron span.id_msg:last').val()
+    },
     trololo,
     'text'
   )
 };
 
-var reloadMessages = setInterval(refresh, 1000)
+var reloadMessages = setInterval(refresh, 10000)
 
 $('#messenger-send').click((event) =>
 {

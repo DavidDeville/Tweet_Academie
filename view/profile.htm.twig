@@ -10,7 +10,7 @@
 
 <div class='row mt-3'>
   {% if VARIABLE == TRUE %}
-    <img id='profilepic' src='{{ PATH_TO_IMAGE }}' alt='Profile picture'>
+    <img id='profilepic' class='d-flex mx-auto mw-100 mb-3' src='{{ PATH_TO_IMAGE }}' alt='Profile picture'>
   {% else %}
     <img class='d-flex mx-auto' src='https://www.flynz.co.nz/wp-content/uploads/profile-placeholder.png' alt='Your future profile picture' width='600px' height='600px'>
   {% endif %}

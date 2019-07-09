@@ -254,7 +254,7 @@ class MessageModel extends Model
       INNER JOIN chat_message
       ON user.id = chat_message.sender_id
       WHERE conversation_id = :id_conv
-      AND submit_time > :last_id
+      AND chat_message.id > :last_id
       ORDER BY submit_time'
     );
     $newmessages->execute([
