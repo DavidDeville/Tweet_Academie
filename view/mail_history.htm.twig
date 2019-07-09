@@ -10,24 +10,27 @@
       {% for message in messages %}
       <div class='d-flex
         {% if message.username == account_name %}
-          justify-content-end lead mt-4'><span class='border border-blue rounded p-2 text-dark bg-warning '>{{ message.content }}</span></div>
+          justify-content-end lead mt-4'><span class='border border-blue rounded p-2 text-dark bg-warning '>{{ message.content }}</span>{{ message.username }}<span class='id_msg'>{{ message.id }}</span></div>
         {% else %}
-          lead mt-4'><span class='border border-purple rounded-lg p-2 text-dark bg-success'>{{ message.content }}</span></div>
+          lead mt-4'><span class='border border-purple rounded-lg p-2 text-dark bg-success'>{{ message.content }}</span>{{ message.username }}<span class='id_msg'>{{ message.id }}</span></div>
         {% endif %}
       {% endfor %}
 
       <div class='mt-5'>
         <label for='exampleFormControlTextarea1' class='text-info ml-1'><h4><strong>Chatbox</strong></h4></label>
-        <form class='row ml-1' method='POST'>
+        <form id='messenger-form' class='row ml-1' method='POST'>
           <div class='input-group-text bg-primary border-0 text-light col-0 rounded-0' id='messenger-invite' type='button'>+</div>
-          <input type='text' class='form-control col-9 bg-primary border-0 rounded-0 text-light' aria-label='With textarea'></input>
+          <input type='text' id='messenger-input' class='form-control col-9 bg-primary border-0 rounded-0 text-light' aria-label='With textarea' autocomplete="off"></input>
           <button type='button' id='messenger-image' class='btn btn-primary col-1 border-0 rounded-0 text-light'>Insert image</button>
           <input type='submit' id='messenger-send' class='btn btn-primary col-1 border-0 rounded-0 text-light' value='Send message'></submit>
         </form>
       </div>
     </div>
-  </div>
 {% endblock %}
 
 {% block javascript %}
+  {{ parent() }}
+  <script src='js/url.js'></script>
+  <script src='js/forms.js'></script>
+  <script src='js/messenger.js'></script>
 {% endblock %}

@@ -4,15 +4,15 @@
 
 {% block body %}
 
-  <div class='row mt-3'>
+  <div class='row no-gutters mt-3'>
     <h1 class='mx-auto'>{{ account_name }}</h1>
   </div>
 
-<div class='row mt-3'>
+<div class='row no-gutters mt-3'>
   <img class='mx-auto' src='' alt='Your Profile Picture'>
 </div>
 
-<div class='row col-12'>
+<div class='row no-gutters col-12'>
 
   <div class='card col-3 border-info mb-3'>
     <div class='card-header'>You follow them</div>
@@ -24,12 +24,17 @@
   </div>
 
   <div class='col-6'>
-    <form id='upload' class='mx-auto mt-3' enctype='multipart/form-data'>
-      <input id='upload-file' type='file' name='upload'>
+    <form id='upload' class='mr-3 ml-3' enctype='multipart/form-data'>
+      {% if VARIABLE == TRUE %}
+        <img id='profilepic' src='{{ PATH_TO_IMAGE }}' alt='Profile picture'>
+      {% else %}
+        <img class='d-flex mx-auto' src='https://www.flynz.co.nz/wp-content/uploads/profile-placeholder.png' alt='Your future profile picture' width='600px' height='600px'>
+      {% endif %}
+      <input id='upload-file' class='' type='file' name='upload'>
       <input id='upload-submit' class='float-right' type='submit' name='submitupload' value='Change image'>
     </form>
 
-    <form id='modifyinfo' class='mx-auto'>
+    <form id='modifyinfo' class='mr-3 ml-3'>
       <input id='info-email' class='mt-3 form-control' type='email' name='email' value='{{ email }}'>
       <input id='info-name' class='mt-3 form-control' type='text' name='profilename' value='{{ name }}'>
       <input id='info-city' class='mt-3 form-control' type='text' name='city' value='{{ city }}'>

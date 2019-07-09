@@ -1,7 +1,7 @@
 <?php
 
 require_once 'PageController.class.php';
-require_once 'FormController.class.php';
+require_once 'FormMessengerController.class.php';
 require_once 'model/UserModel.class.php';
 require_once 'model/MessageModel.class.php';
 
@@ -31,7 +31,7 @@ final class MessengerController extends PageController
 
     $this->user = new UserModel();
     $this->message = new MessageModel();
-    // $this->form = new FormController();
+    $this->form = new FormMessengerController();
   }
 
   /*
@@ -58,10 +58,19 @@ final class MessengerController extends PageController
   {
     if ($this->form_submited())
     {
-      $this->send_message();
+      if ($this->form_matches('messenger'))
+      {
+        if ($this->form->is_valid())
+        {
+          $this->send_message();
+        }
+      }
     }
   }
 
+  /*
+  ** Checks if a conv is selected in URL
+  */
   private function conv_selected()
   {
     return(
@@ -69,6 +78,9 @@ final class MessengerController extends PageController
     );
   }
 
+  /*
+  ** Prints the conversation from the URL's ID
+  */
   private function display_conv()
   {
     echo $this->twig->render('mail_history.htm.twig', [
@@ -79,22 +91,25 @@ final class MessengerController extends PageController
     ]);
   }
 
+  /*
+  ** Prints the list of all the user's conversation
+  */
   private function display_list()
   {
     // vue
   }
 
-  private function form_submitted()
-  {
-    return(
-      isset($_POST['message'])
-    );
-  }
-
-  private function send_messsage()
+  /*
+  ** Ask the model to send a message
+  **
+  ** @param message from the input
+  ** @param User's ID
+  ** @param Conversation's ID
+  */
+  private function send_message()
   {
     $this->message->send_message(
-      $_POST['message'],
+      $_POST['messenger-input'],
       $this->user->get_account_id(),
       $_GET['id']
     );

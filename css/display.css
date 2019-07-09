@@ -8,4 +8,5 @@
   height:50px;
   float:right;
   z-index:99;
+  box-sizing:border-box;
 }

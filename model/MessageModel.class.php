@@ -219,7 +219,8 @@ class MessageModel extends Model
     $messages = $this->link->prepare(
       'SELECT user.username,
       user.display_name,
-      chat_message.content
+      chat_message.content,
+      chat_message.id
       FROM user
       INNER JOIN chat_message
       ON user.id = chat_message.sender_id
@@ -231,6 +232,37 @@ class MessageModel extends Model
     ]);
     return(
       $messages->fetchAll(
+        PDO::FETCH_ASSOC
+      )
+    );
+  }
+
+  /*
+  ** Gets the new messages from ajax request
+  **
+  ** @param int $id_conv: The id where we search the messages
+  **
+  ** @return Array: The senders' id and content of the messages
+  */
+  public function new_content_conv(int $id_conv, int $id_msg)
+  {
+    $newmessages = $this->link->prepare(
+      'SELECT user.username,
+      user.display_name,
+      chat_message.content
+      FROM user
+      INNER JOIN chat_message
+      ON user.id = chat_message.sender_id
+      WHERE conversation_id = :id_conv
+      AND submit_time > :last_id
+      ORDER BY submit_time'
+    );
+    $newmessages->execute([
+      ':id_conv' => $id_conv,
+      ':lastid' => $_POST['id_msg']
+    ]);
+    return(
+      $newmessages->fetchAll(
         PDO::FETCH_ASSOC
       )
     );

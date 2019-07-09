@@ -9,10 +9,14 @@
 </div>
 
 <div class='row mt-3'>
-    <img class='mx-auto' src='' alt='Profile Picture'>
+  {% if VARIABLE == TRUE %}
+    <img id='profilepic' src='{{ PATH_TO_IMAGE }}' alt='Profile picture'>
+  {% else %}
+    <img class='d-flex mx-auto' src='https://www.flynz.co.nz/wp-content/uploads/profile-placeholder.png' alt='Your future profile picture' width='600px' height='600px'>
+  {% endif %}
 </div>
 
-<table class='table col-6 mt-2 mx-auto'>
+<table class='table col-6 mt-5 mx-auto'>
     <tr>
         <th scope='col'>Pseudo</th>
         <th scope='col'>City</th>
@@ -25,7 +29,7 @@
     </tr>
 </table>
 
-<div class='row col-6 justify-content-between mx-auto'>
+<div class='row col-6 justify-content-between mx-auto mb-5'>
     <button class='btn btn-success' id='follow'>Follow</button>
     <button class='btn btn-success text-right' id'talk'>Send a message</button>
 </div>
@@ -33,7 +37,7 @@
 {% endblock %}
 
 {% block javascript %}
-    {{ parent() }} 
+    {{ parent() }}
     <script src='js/url.js'></script>
     <script src='js/profile.js'></script>
 {% endblock %}
