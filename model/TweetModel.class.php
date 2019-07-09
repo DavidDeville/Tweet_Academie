@@ -178,29 +178,114 @@ class TweetModel extends Model
     }
 
     /*
-    ** Function to like a tweet
+    ** Makes the user like the tweet, if he hasn't already
     **
     ** @param int $user_id: id of the user that liked the tweet
-    **
     ** @param int $post_id: id of the liked tweet
     */
-
     public function like(int $user_id, int $post_id)
     {
-        $like_tweet_query = $this->link->prepare(
-            'INSERT INTO favorite (
-                user_id, 
-                post_id
-            ) VALUES (
-                :user_id,
-                :post_id
-            )'
-        );
+        if (! $this->is_liked_by($user_id, $post_id))
+        {
+            $like_tweet_query = $this->link->prepare(
+                'INSERT INTO favorite (
+                    user_id, 
+                    post_id
+                ) VALUES (
+                    :user_id,
+                    :post_id
+                )'
+            );
+    
+            $like_tweet_query->execute([
+                ':user_id' => $user_id,
+                ':post_id' => $post_id
+            ]);
+        }
+    }
 
-        $like_tweet_query->execute([
-            ':user_id' => $user_id,
-            ':post_id' => $post_id
+    /*
+    ** Checks whether or not the user already liked the tweet
+    **
+    ** @param int $user: the ID of the user
+    ** @param int $tweet: the ID of the tweet
+    **
+    ** @return bool: true if the used liked the post, false otherwise
+    */
+    public function is_liked_by(int $user, int $tweet)
+    {
+        $liked_query = $this->link->prepare(
+            'SELECT id
+            FROM favorite
+            WHERE 
+                post_id = :tweet &&
+                user_id = :user'
+        );
+        $liked_query->execute([
+            ':tweet' => $tweet,
+            ':user' => $user
         ]);
+        return (
+            $liked_query->rowCount() > 0
+        );
+    }
+
+    /*
+    ** Removes the like of the user on the given tweet
+    ** If user didn't like the post, nothing will be done
+    **
+    ** @param int $user_id: the ID of the user
+    ** @param int $post_id: the ID of the tweet
+    */
+    public function unlike (int $user_id, int $post_id)
+    {
+        if ($this->is_liked_by($user_id, $post_id))
+        {
+            $delete_query = $this->link->prepare(
+                'DELETE FROM favorite
+                WHERE 
+                    user_id = :user &&
+                    post_id = :post'
+            );
+            $delete_query->execute([
+                ':user' => $user_id,
+                ':post' => $post_id
+            ]);
+        }
+    }
+
+    /*
+    ** Finds a tweet from it's content, author and submit time
+    **
+    ** @param string $content: the content of the tweet to find
+    ** @param string $date: the date and time to tweet has been submited on
+    ** @param int $author: the ID of the author
+    **
+    ** @return in: the ID of the found tweet, or false if no match is found
+    **      If several matches are found, only the first one is returned
+    */
+    public function find(string $content, string $date, int $author)
+    {
+        $find_query = $this->link->prepare(
+            'SELECT id 
+            FROM post
+            WHERE
+                sender_id = :user &&
+                content = :content &&
+                submit_time = :date'
+        );
+        $find_query->execute([
+            ':user' => $author,
+            ':content' => $content,
+            ':date' => $date
+        ]);
+        if ($find_query->rowCount() > 0)
+        {
+            return (
+                $find_query->fetch(PDO::FETCH_ASSOC)['id']
+            );
+        }
+        return (false);
     }
 
     /*
