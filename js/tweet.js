@@ -10,7 +10,6 @@ $('#tweet-send').click((event) =>
     const form =
     {
         'tweet-content': $('#tweet-content').val()
-
     };
 
     $.post(
@@ -28,9 +27,11 @@ $('#tweet-send').click((event) =>
                 'text'
             ).then(() =>
             {
-                //Add the tweet using the model found in feed view
-
-                $('')
+                //Add the tweet using the design found in feed view
+                $('#test').append('blablabla');
+                // $('#target').append('<div>').addClass('list-group>');
+                // $('.list-group').append('<div>').addClass('list-group-item list-group-item-action flex-column align-items-start active mt-3');
+                alert('success');
 
             });
         }

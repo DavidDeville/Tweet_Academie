@@ -9,14 +9,31 @@
 
 ini_set('display_errors', 1);
 
-require_once '../controller/FormController.class.php';
+require_once '../controller/FormTweetController.class.php';
+require_once '../model/TweetModel.class.php';
 
-$form = new FormController();
+session_start();
+
+$form = new FormTweetController();
+$tweet = new TweetModel();
 
 $form->is_valid();
+
+/*
+** ID of field in the form
+*/
+$content = 'tweet-content';
+
+if(strlen($form->field_is_valid($content)) > 0)
+{
+    $tweet->post($_SESSION['account-id'], $_POST['tweet-content']);
+}
+else
+{
+    $form->set_state($content, 'Your Tweet is empty');
+}
 
 echo json_encode(
     $form->status()
 );
-
 ?>

@@ -7,8 +7,7 @@ require_once 'FormController.class.php';
 /*
 ** Form Validation Base Controller
 */
-
-abstract class FormTweetController extends FormController
+final class FormTweetController extends FormController
 {
     /*
     ** Checks if the whole form is valid
@@ -35,17 +34,12 @@ abstract class FormTweetController extends FormController
     */
     public function check_content()
     {
-
-        if(strlen($_POST['tweet-content']) > 0 && strlen($_POST['tweet-content']) < 141)
-        {
-            $this->write_status('tweet-content', $this->valid_message);
-            return(true);
-        }
-        else
-        {
-            $this->write_status('tweet-content', $error_message);
-            return(false);
-        }
+        return(
+            $this->field_is_filled(
+                'tweet-content',
+                'Tweet is either empty or too long'
+            )
+        );
     }
 }
 ?>

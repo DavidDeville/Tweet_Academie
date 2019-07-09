@@ -137,7 +137,6 @@ class TweetModel extends Model
         foreach ($following_ids as $following)
         {
             $following_list .= $following['user_id'] . ',';
-            echo 'current state: ' . $following_list;
         }
         $following_list = substr($following_list, 0, strlen($following_list) - 1);
         $following_list .= ')';
