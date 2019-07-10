@@ -1,0 +1,21 @@
+{% extends 'memberbase.htm.twig' %}
+
+{% block title %}Recherche{% endblock %}
+
+{% block body %}
+
+  <section class='row no-gutters'>
+    <h1>Searching something ?</h1>
+    <ul id='hashtags' class='col-6'>
+      {% for hashtag in hashtags %}
+        <li class='hashtag'>{{ hashtag }}</li>
+      {% endfor %}
+    </ul>
+    <ul id='members' class='col-6'>
+      {% for member in members %}
+        <li class='member'>{{ member }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+{% endblock %}
