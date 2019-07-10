@@ -2,6 +2,7 @@
 
 require_once 'vendor/autoload.php';
 require_once 'Controller.class.php';
+require_once 'FormSearchController.class.php';
 
 /*
 ** Base controller for pages
@@ -88,8 +89,7 @@ abstract class PageController extends Controller
         else
         {
             return (false);
-        }
-        
+        }   
     }
 }
 

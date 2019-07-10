@@ -20,6 +20,8 @@ final class FormSearchController extends FormController
         $this->check_request();
         $this->check_format();
 
+        die('FIELD NAME HAS NOT BEEN SET');
+
         return (
             parent::is_valid()
         );
@@ -34,7 +36,7 @@ final class FormSearchController extends FormController
     {
         return (
             $this->field_is_field(
-                'FIELD_NAME_HERE',
+                'search-input',
                 'Please enter something to search'
             )
         );
@@ -47,19 +49,19 @@ final class FormSearchController extends FormController
     */ 
     private function check_format()
     {
-        if ($this->field_is_valid('FIELD_NAME'))
+        if ($this->field_is_valid('search-input'))
         {
-            if (strpos($_POST['FIELD_NAME'], '#') !== false)
+            if (strpos($_POST['search-input'], '#') !== false)
             {
-                $this->set_state('FIELD_NAME', $this->valid_message);
+                $this->set_state('search-input', $this->valid_message);
             }
-            else if (strpos($_POST['FIELD_NAME'], '@') !== false)
+            else if (strpos($_POST['search-input'], '@') !== false)
             {
-                $this->set_state('FIELD_NAME', $this->valid_message);
+                $this->set_state('search-input', $this->valid_message);
             }
             else
             {
-                $this->set_state('FIELD_NAME', 'Please enter a #hashtag or an @username');
+                $this->set_state('search-input', 'Please enter a #hashtag or an @username');
             }
         }
     }
