@@ -26,10 +26,6 @@ final class FormTweetController extends FormController
     /* 
     ** Function to check the tweet content
     ** 
-    ** @param string $field_name: name of the field inside the form
-    **
-    ** @param string $error_message: message to display in case it's invalid
-    ** 
     ** @return bool: true if the form is valid, otherwise, returns false
     */
     public function check_content()

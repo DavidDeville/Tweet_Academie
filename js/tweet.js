@@ -9,9 +9,19 @@ $('#tweet-send').click((event) =>
 
     const form =
     {
-        'tweet-content': $('#tweet-content').val()
+        'tweet-content': $('#tweet-content').val() // La valeur du tweet
     };
 
+    /*
+    ** We target a file (the .php one)
+    ** We point out the data type sent to the file
+    ** The next parameter is the name of the return function
+    ** And the return data's type
+    **
+    ** If no 'invalid-feedback' has been found
+    ** another request with the data is sent to index.php
+    ** and return the specified data (text atm)
+    */
     $.post(
         'ajax/tweet_send.php',
         form,
@@ -23,20 +33,36 @@ $('#tweet-send').click((event) =>
         {
             $.post(
                 'index.php',
-                form,
-                'text'
+                form
             ).then(() =>
             {
-                //Add the tweet using the design found in feed view (WIP)
-                $('#test').append('blablabla');
-                // $('#target').append('<div>').addClass('list-group>');
-                // $('.list-group').append('<div>').addClass('list-group-item list-group-item-action flex-column align-items-start active mt-3');
-                alert('success');
-
+                tweetRefresh();
             });
         }
     });
 });
+
+// Fonction qui récupère les tweets envoyés après un certain timestamp
+const tweetRefresh = () =>
+{
+    // requête ajax pour récupérer les tweets en html
+    // et envoie de la réponse à displayTweets
+
+    $.post(
+        'ajax/tweet_fetch.php', // script php qui fait echo twig->render('tweet.htm.twig')
+        {
+            after: 1500
+        },
+        displayTweets,
+        'html'
+    );
+};
+
+const displayTweets = (response) =>
+{
+    // chaque élément dans response est un tweet
+    // ajout du tweet à la page
+};
 
 /*
 ** From a button on a tweet-div, returns the most outern div making the tweet

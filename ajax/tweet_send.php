@@ -24,6 +24,14 @@ $form->is_valid();
 */
 $content = 'tweet-content';
 
+
+/*
+** Verification of the tweet's length
+** If the tweet's length is greater than 0
+** The tweet is sent and returns true
+** If empty, display an error message 
+** and returns false
+*/
 if(strlen($form->field_is_valid($content)) > 0)
 {
     $tweet->post($_SESSION['account-id'], $_POST['tweet-content']);

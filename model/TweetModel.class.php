@@ -1,5 +1,7 @@
 <?php
 
+ini_set('display_errors', 1);
+
 require_once 'Model.class.php';
 
 /*
@@ -149,6 +151,40 @@ class TweetModel extends Model
                 submit_time
             FROM post INNER JOIN user ON user.id = post.sender_id
             WHERE sender_id IN ' . $following_list
+        );
+        $get_followers_tweets->execute();
+        return(
+            $get_followers_tweets->fetchAll(PDO::FETCH_ASSOC)
+        );
+    }
+
+    /*
+    ** Function to get all tweets from followed users with a timestamp
+    **
+    ** @param array $following_ids: ids of person you're currently following
+    **
+    ** @return array: all tweets of followed users based on a timestamp
+    */
+
+    public function for_user_by_time(Array $following_ids)
+    {
+        $following_list = '(';
+        foreach ($following_ids as $following)
+        {
+            $following_list .= $following['user_id'] . ',';
+        }
+        $following_list = substr($following_list, 0, strlen($following_list) - 1);
+        $following_list .= ')';
+        
+        $get_followers_tweets = $this->link->prepare(
+            'SELECT 
+                display_name AS author,
+                username as author_account,
+                content,
+                submit_time
+            FROM post INNER JOIN user ON user.id = post.sender_id
+            WHERE sender_id IN ' . $following_list . ' && TIMEDIFF(submit_time, NOW()) 
+            ORDER BY submit_time DESC'
         );
         $get_followers_tweets->execute();
         return(
