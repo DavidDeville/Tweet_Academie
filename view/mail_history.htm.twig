@@ -8,12 +8,16 @@
     <div class='jumbotron bg-secondary'>
 
       {% for message in messages %}
-      <div class='d-flex
-        {% if message.username == account_name %}
-          justify-content-end lead mt-4'><span class='border border-blue rounded p-2 text-dark bg-warning '>{{ message.content }}</span>{{ message.username }}<span class='id_msg'>{{ message.id }}</span></div>
-        {% else %}
-          lead mt-4'><span class='border border-purple rounded-lg p-2 text-dark bg-success'>{{ message.content }}</span>{{ message.username }}<span class='id_msg'>{{ message.id }}</span></div>
-        {% endif %}
+        {%
+          include('messageBubble.htm.twig') with
+          {
+            'id' : message.id,
+            'content' : message.content,
+            'account_name' : account_name,
+            'username' : message.username
+          }
+        %}
+
       {% endfor %}
 
       <div class='mt-5'>

@@ -241,6 +241,7 @@ class MessageModel extends Model
   ** Gets the new messages from ajax request
   **
   ** @param int $id_conv: The id where we search the messages
+  ** @param int $id_msg: the last ID where the search begins
   **
   ** @return Array: The senders' id and content of the messages
   */
@@ -249,17 +250,19 @@ class MessageModel extends Model
     $newmessages = $this->link->prepare(
       'SELECT user.username,
       user.display_name,
-      chat_message.content
+      chat_message.content,
+      chat_message.sender_id
+      chat_message.id
       FROM user
       INNER JOIN chat_message
       ON user.id = chat_message.sender_id
       WHERE conversation_id = :id_conv
-      AND chat_message.id > :last_id
+      AND chat_message.id > :id_msg
       ORDER BY submit_time'
     );
     $newmessages->execute([
       ':id_conv' => $id_conv,
-      ':lastid' => $_POST['id_msg']
+      ':id_msg' => $id_msg
     ]);
     return(
       $newmessages->fetchAll(

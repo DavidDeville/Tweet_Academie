@@ -1,0 +1,29 @@
+{#
+## View for a message bubble
+##
+## - username: the username of the connected user (user.username)
+## - content: the content the message (chat_message.content)
+## - id: the ID of the message (chat_message.id)
+#}
+
+{% if username == account_name %}
+  <div class='d-flex justify-content-end lead mt-4'>
+    <span class='border border-blue rounded p-2 text-dark bg-warning '>
+      {{ content }}
+    </span>
+    {{ username }}
+    <span class='id_msg'>
+      {{ id }}
+    </span>
+  </div>
+{% else %}
+  <div class='d-flex lead mt-4'>
+    <span class='border border-purple rounded-lg p-2 text-dark bg-success'>
+      {{ content }}
+    </span>
+    {{ username }}
+    <span class='id_msg'>
+      {{ id }}
+    </span>
+  </div>
+{% endif %}

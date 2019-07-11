@@ -5,44 +5,54 @@ const trololo = (response) =>
 
 const refresh = () =>
 {
+  let bite = urlParams();
   $.post(
-    'ajax/refresh.php',
+    'ajax/messenger_refresh.php',
     {
-      id_msg: $('.jumbotron span.id_msg:last').val()
+      id_conv: bite.id,
+      id_msg: $('.id_msg').last().text()
     },
     trololo,
     'text'
-  )
+  );
 };
 
-var reloadMessages = setInterval(refresh, 10000)
-
-$('#messenger-send').click((event) =>
+$(document).ready(function()
 {
-  event.preventDefault();
+  var reloadMessages = setInterval(refresh, 5000);
 
-  $.post(
-      'ajax/message_send.php',
-      {
-          'messenger-input': $('#messenger-input').val()
-      },
-      treatAjaxFormResponse,
-      'json'
-  ).then(() =>
+  $('#messenger-send').click((event) =>
   {
-    if ($('#messenger-form').find('.invalid-feedback').length === 0)
-    {
-      $.post(
-        currentUrl(),
-        {
-          'messenger-input': $('#messenger-input').val()
-        },
-        'text'
-      ).then(() =>
-      {
-        reloadMessages
-      });
-    }
-  });
+    event.preventDefault();
 
+    $.post(
+        'ajax/message_send.php',
+        {
+            'messenger-input': $('#messenger-input').val()
+        },
+        treatAjaxFormResponse,
+        'json'
+    ).then(() =>
+    {
+      if ($('#messenger-form').find('.invalid-feedback').length === 0)
+      {
+        $.post(
+          currentUrl(),
+          {
+            'messenger-input': $('#messenger-input').val()
+          },
+          'text'
+        ).then(() =>
+        {
+          reloadMessages
+        });
+      }
+    });
+  });
 });
+
+// requête ajax sur un fichier php qui récupère les messages envoyés après un certain temps, réponse au format html
+// la requête envoit la réponse à une fonction s'occupe de rajouter chaque message à la $page
+
+// après envoi d'un message -> auto refresh
+// au bout de quelques secondes -> auto refresh
