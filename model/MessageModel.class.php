@@ -36,7 +36,7 @@ class MessageModel extends Model
   public function get_all_convs(int $id_user)
   {
     $user_convs = $this->link->prepare(
-      'SELECT chat_conversation_id
+      'SELECT chat_participant.chat_conversation_id
       FROM chat_participant
       WHERE user_id = :id_user
       ORDER BY chat_conversation_id'
@@ -290,14 +290,14 @@ class MessageModel extends Model
       FROM user
       INNER JOIN chat_message
       ON user.id = chat_message.sender_id
-      WHERE 
+      WHERE
         conversation_id = :id_conv &&
         submit_time > FROM_UNIXTIME(:stamp)
       ORDER BY submit_time'
     );
     $latest_messages->execute([
       ':id_conv' => $conv,
-      ':stamp' => $timestamp / 10
+      ':stamp' => $timestamp / 1000
     ]);
     return(
       $latest_messages->fetchAll(
