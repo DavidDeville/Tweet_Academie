@@ -508,20 +508,21 @@ class UserModel extends Model
         );
     }
 
-
-
-
-
-
-
-
-    // INCOMPLETE /////////////////////////////////////////////////////////
-
-    
+    /*
+    ** Finds a member account from a pattern
+    **
+    ** @param string $pattern: the pattern to look for
+    **
+    ** @return Array: every account matching the pattern
+    */
     public function by_pattern(string $pattern)
     {
         $pattern_query = $this->link->prepare(
-            'SELECT username
+            'SELECT 
+                username as account_name,
+                display_name as pseudo,
+                city,
+                birth_date
             FROM user
             WHERE username LIKE :pattern'
         );
@@ -533,6 +534,13 @@ class UserModel extends Model
         ));
     }
 
+    /*
+    ** Finds members account from a list of pattern
+    **
+    ** @param string $pattern: patterns to look for
+    **
+    ** @return Array: every account matching at least one pattern
+    */
     public function by_patterns(Array $patterns)
     {
         $matches = [];
@@ -546,7 +554,6 @@ class UserModel extends Model
         }
         return ($matches);
     }
-    
 }
 
 ?>

@@ -4,9 +4,10 @@
 
 {% block body %}
 
-  <section class='row no-gutters'>
+  <section class='row col-8 mx-auto no-gutters'>
+
     <h1>Searching something ?</h1>
-    
+        
     <ul class='col-6'>
       {% for tweet in hashtags %}
         <li class="list-group">
@@ -25,10 +26,23 @@
       {% endfor %}
     </ul>
     
-    <ul id='members' class='col-6'>
-      {% for member in members %}
-        
-      {% endfor %}
+    <ul class='col-6'>
+      <table class='table col-6 mt-5 mx-auto'>
+        <tr>
+            <th scope='col'>Pseudo</th>
+            <th scope='col'>City</th>
+            <th scope='col'>Birth date</th>
+        </tr>
+        {% for member in members %}
+          <tr class='table-info'>
+            <td><a href='profile.php?account={{ member.account_name }}'>@{{ member.account_name }}</a></td>
+            <td>{{ member.pseudo }}</td>
+            <td>{{ member.city }}</td>
+            <td>{{ member.birth_date }}</td>
+        </tr>
+        {% endfor %} 
+      </table>
+      
     </ul>
   </section>
 

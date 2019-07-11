@@ -394,7 +394,7 @@ class TweetModel extends Model
         );
 
         $hashtag_query->execute([
-            ':hashtag' => '%' . $hashtag . '%'
+            ':hashtag' => '%#' . $hashtag . '%'
         ]);
 
         return(
@@ -422,6 +422,6 @@ class TweetModel extends Model
         }
         return ($tweets);
     }
-    
 }
+
 ?>

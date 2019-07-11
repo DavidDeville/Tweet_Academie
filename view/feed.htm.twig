@@ -25,7 +25,7 @@
                             <h5 class="mb-1">{{ tweet.author }}</h5>
                             <small class='tweet-submited'>{{ tweet.submit_time }}</small>
                         </div>
-                        <p class="mb-1 tweet-author">@{{ tweet.author_account }}</p>
+                        <p class="mb-1 tweet-author"><a href='profile.php?account={{ account_name }}'>@{{ tweet.author_account }}</a></p>
                         <p class="mb-1 tweet-content">{{ tweet.content }}</p>
                         <small type="button" class='tweet-reply'><i class="fas fa-reply"></i></small>
                         <small type="button" class='tweet-retweet'><i class="fas fa-retweet"></i></small>

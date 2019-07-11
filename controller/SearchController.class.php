@@ -31,14 +31,17 @@ final class SearchController extends PageController
         $this->redirect_on_empty_query();
     }
 
+    /*
+    ** Displays the appropriate view for the current context
+    **      @see PageController::display_view()
+    */
     public function display_view()
     {
         $hashtags = [];
         $usernames = [];
         $this->init_terms($hashtags, $usernames);
+        
         $this->redirect_on_empty_queries($hashtags, $usernames);
-
-        //$this->myvar_dump($this->tweet->hashtags($hashtags)[0]);
 
         echo $this->twig->render('search.htm.twig', [
             'account_name' => $this->user->get_account_name(),
@@ -47,6 +50,10 @@ final class SearchController extends PageController
         ]);
     }
 
+    /*
+    ** Decides which action should be done
+    **      @see PageController::handle_request()
+    */
     public function handle_request() {}
 
     /*
