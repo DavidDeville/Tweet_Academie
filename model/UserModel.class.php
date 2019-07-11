@@ -507,6 +507,46 @@ class UserModel extends Model
             )
         );
     }
+
+
+
+
+
+
+
+
+    // INCOMPLETE /////////////////////////////////////////////////////////
+
+    
+    public function by_pattern(string $pattern)
+    {
+        $pattern_query = $this->link->prepare(
+            'SELECT username
+            FROM user
+            WHERE username LIKE :pattern'
+        );
+        $pattern_query->execute([
+            ':pattern' => '%' . $pattern . '%'
+        ]);
+        return ($pattern_query->fetchAll(
+            PDO::FETCH_ASSOC
+        ));
+    }
+
+    public function by_patterns(Array $patterns)
+    {
+        $matches = [];
+
+        foreach ($patterns as $pattern)
+        {
+            foreach ($this->by_pattern($pattern) as $match)
+            {
+                array_push($matches, $match);
+            }
+        }
+        return ($matches);
+    }
+    
 }
 
 ?>

@@ -378,25 +378,50 @@ class TweetModel extends Model
     **
     ** @return array: all tweets containing the hashtag
     */
-
     public function hashtag(string $hashtag)
     {
-        $tweets_by_hashtag_query = $this->link->prepare(
-            'SELECT id,
-            sender_id,
-            content,
-            submit_time
+        $hashtag_query = $this->link->prepare(
+            'SELECT 
+                post.id,
+                user.display_name AS author,
+                user.username AS author_account,
+                content,
+                submit_time
             FROM post
-            WHERE content LIKE :hashtag'
+            INNER JOIN user ON user.id = post.sender_id
+            WHERE content LIKE :hashtag
+            ORDER BY submit_time DESC'
         );
 
-        $tweets_by_hashtag_query->execute([
+        $hashtag_query->execute([
             ':hashtag' => '%' . $hashtag . '%'
         ]);
 
         return(
-            $tweets_by_hashtag_query->fetchAll(PDO::FETCH_ASSOC)
+            $hashtag_query->fetchAll(PDO::FETCH_ASSOC)
         );
     }
+
+    /*
+    ** Function to get tweets from a list of #hashtags
+    **
+    ** @param Array $hashtags: array of strings, every requested hashtags, without the '#'
+    **
+    ** @return Array: every tweets containing at least one requested hashtag
+    */
+    public function hashtags(Array $hashtags)
+    {
+        $tweets = [];
+
+        foreach ($hashtags as $hashtag)
+        {
+            foreach ($this->hashtag($hashtag) as $tweet)
+            {
+                array_push($tweets, $tweet);
+            }
+        }
+        return ($tweets);
+    }
+    
 }
 ?>
