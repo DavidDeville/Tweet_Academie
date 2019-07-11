@@ -96,7 +96,12 @@ final class MessengerController extends PageController
   */
   private function display_list()
   {
-    // vue
+    echo $this->twig->render('mail_histories.htm.twig', [
+      'account_name' => $this->user->get_account_name(),
+      'conversations' => $this->message->get_all_convs(
+        $this->user->get_account_id()
+        )
+    ]);
   }
 
   /*
