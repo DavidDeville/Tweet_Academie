@@ -251,7 +251,7 @@ class MessageModel extends Model
       'SELECT user.username,
       user.display_name,
       chat_message.content,
-      chat_message.sender_id
+      chat_message.sender_id,
       chat_message.id
       FROM user
       INNER JOIN chat_message
@@ -266,6 +266,41 @@ class MessageModel extends Model
     ]);
     return(
       $newmessages->fetchAll(
+        PDO::FETCH_ASSOC
+      )
+    );
+  }
+
+  /*
+  ** Gets all messages sent after a given timestamp
+  **
+  ** @param int $conv: the ID of the conv
+  ** @param int $timestamp: the timestamp to compare messages with
+  **
+  ** @êeturn Array: all messages sent after the timestamp
+  */
+  public function fetch_messages(int $conv, int $timestamp)
+  {
+    $latest_messages = $this->link->prepare(
+      'SELECT user.username,
+      user.display_name,
+      chat_message.content,
+      chat_message.sender_id,
+      chat_message.id
+      FROM user
+      INNER JOIN chat_message
+      ON user.id = chat_message.sender_id
+      WHERE 
+        conversation_id = :id_conv &&
+        submit_time > FROM_UNIXTIME(:stamp)
+      ORDER BY submit_time'
+    );
+    $latest_messages->execute([
+      ':id_conv' => $conv,
+      ':stamp' => $timestamp / 10
+    ]);
+    return(
+      $latest_messages->fetchAll(
         PDO::FETCH_ASSOC
       )
     );
