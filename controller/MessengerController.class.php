@@ -100,7 +100,7 @@ final class MessengerController extends PageController
       'account_name' => $this->user->get_account_name(),
       'conversations' => $this->message->get_all_convs(
         $this->user->get_account_id()
-        )
+      )
     ]);
   }
 

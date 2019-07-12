@@ -11,14 +11,13 @@
               {%
                 include('conversationBubble.htm.twig') with
                 {
-                  'id' : conversation.chat_conversation_id
+                  'id' : conversation.conv_id,
+                  'username' : conversation.username,
+                  'participants' : conversation.participants
                 }
               %}
             {% endfor %}
 
         </div>
     </div>
-{% endblock %}
-
-{% block javascript %}
 {% endblock %}

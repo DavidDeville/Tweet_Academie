@@ -36,19 +36,41 @@ class MessageModel extends Model
   public function get_all_convs(int $id_user)
   {
     $user_convs = $this->link->prepare(
-      'SELECT chat_participant.chat_conversation_id
+      'SELECT
+        chat_participant.chat_conversation_id AS "conv_id"
       FROM chat_participant
+      INNER JOIN user
+      ON user.id = chat_participant.user_id
       WHERE user_id = :id_user
-      ORDER BY chat_conversation_id'
+      GROUP BY chat_participant.chat_conversation_id
+      '
     );
     $user_convs->execute([
       ':id_user' => $id_user
     ]);
-    return(
-      $user_convs->fetchAll(
-        PDO::FETCH_ASSOC
-        )
-    );
+
+    $all_convs  = $user_convs->fetchAll(PDO::FETCH_ASSOC);
+    $this->add_participants($all_convs);
+
+    return ($all_convs);
+  }
+
+  private function add_participants(Array &$all_convs)
+  {
+      $partic_query = $this->link->prepare(
+        'SELECT GROUP_CONCAT(" ", username) AS participants
+        FROM user
+        INNER JOIN chat_participant
+        ON chat_participant.user_id = user.id
+        WHERE chat_participant.chat_conversation_id = :conv'
+      );
+      foreach ($all_convs as &$conv) // /!\ parcourt avec une réf sur la valeur pour modifier le sous-tableau
+      {
+        $partic_query->execute([
+          ':conv' => $conv['conv_id']
+        ]);
+        $conv['participants'] = $partic_query->fetch(PDO::FETCH_ASSOC)['participants'];
+      }
   }
 
   /*
