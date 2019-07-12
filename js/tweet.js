@@ -16,11 +16,11 @@ $('#tweet-send').click((event) =>
     ** We target a file (the .php one)
     ** We point out the data type sent to the file
     ** The next parameter is the name of the return function
-    ** And the return data's type
+    ** And the last one is the return of data's type
     **
     ** If no 'invalid-feedback' has been found
     ** another request with the data is sent to index.php
-    ** and return the specified data (text atm)
+    ** and refreshes it
     */
     $.post(
         'ajax/tweet_send.php',
@@ -37,10 +37,13 @@ $('#tweet-send').click((event) =>
             ).then(() =>
             {
                 tweetRefresh();
+                $('#tweet-content').val('');
             });
         }
     });
 });
+
+let timestamp = Date.now();
 
 // Fonction qui récupère les tweets envoyés après un certain timestamp
 const tweetRefresh = () =>
@@ -49,19 +52,28 @@ const tweetRefresh = () =>
     // et envoie de la réponse à displayTweets
 
     $.post(
-        'ajax/tweet_fetch.php', // script php qui fait echo twig->render('tweet.htm.twig')
+        'ajax/tweet_refresh.php', // script php qui fait echo twig->render('tweet.htm.twig')
         {
-            after: 1500
+            timestamp: timestamp
         },
         displayTweets,
-        'html'
+        'text'
     );
+    timestamp = Date.now();
 };
 
+/*
+** Callback for for_user_by_time()
+** Adds tweet to the display zone
+**
+** @var response: tweet as sent by the ajax request
+*/
 const displayTweets = (response) =>
 {
     // chaque élément dans response est un tweet
     // ajout du tweet à la page
+    //$(response).insertBefore('#testos');
+    console.log(response);
 };
 
 /*
@@ -130,3 +142,8 @@ $('.tweet-retweet').on('click', (event) =>
         createTweetForm(tweetFromButton(event.target))
     );
 });
+
+/*
+** Autorefresh
+*/
+setInterval(tweetRefresh, 3000);

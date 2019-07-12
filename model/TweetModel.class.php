@@ -166,7 +166,7 @@ class TweetModel extends Model
     ** @return array: all tweets of followed users based on a timestamp
     */
 
-    public function for_user_by_time(Array $following_ids)
+    public function for_user_by_time(Array $following_ids, int $timestamp)
     {
         $following_list = '(';
         foreach ($following_ids as $following)
@@ -183,10 +183,13 @@ class TweetModel extends Model
                 content,
                 submit_time
             FROM post INNER JOIN user ON user.id = post.sender_id
-            WHERE sender_id IN ' . $following_list . ' && TIMEDIFF(submit_time, NOW()) 
-            ORDER BY submit_time DESC'
+            WHERE sender_id IN ' . $following_list . ' &&
+            submit_time > FROM_UNIXTIME(:stamp)
+            ORDER BY submit_time'
         );
-        $get_followers_tweets->execute();
+        $get_followers_tweets->execute([
+            ':stamp' => $timestamp / 1000
+          ]);
         return(
             $get_followers_tweets->fetchAll(PDO::FETCH_ASSOC)
         );
