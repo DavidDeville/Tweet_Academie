@@ -12,28 +12,14 @@ const fetchMessages = () =>
   let account_name = profileLink.substr(profileLink.lastIndexOf('=') + 1);
 
   $.post(
-    'ajax/messenger_refresh.php',
-    {
-      timestamp: timestamp,
-      'conv-id': urlParams().id,
-      account_name: account_name
-    },
-    displayMessages,
-    'text'
-  );
-
-  timestamp = Date.now();
-};
-
-/*
-** Callback for fetchMessages()
-** Adds messages to the display zone
-**
-** @var htmlResponse: messages as sent by the ajax request
-*/
-const displayMessages = (htmlResponse) =>
-{
-  $(htmlResponse).insertBefore('#messenger-controls');
+    'ajax/messenger_refresh.php', {
+    timestamp: timestamp,
+    'conv-id': urlParams().id,
+    account_name: account_name
+  }).then((response) => {
+    $(response).insertBefore('#messenger-controls');
+    timestamp = Date.now();
+  });
 };
 
 /*

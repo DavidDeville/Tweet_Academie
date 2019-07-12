@@ -9,13 +9,13 @@ require_once 'Model.class.php';
 */
 class TweetModel extends Model
 {
-  /*
-  ** Function that writes a tweet
-  **
-  ** @param int $sender_user: user sending the tweet
-  **
-  ** @param Array $user_convs: contains all of the user's convs
-  */
+    /*
+    ** Function that writes a tweet
+    **
+    ** @param int $sender_user: user sending the tweet
+    **
+    ** @param Array $user_convs: contains all of the user's convs
+    */
     public function post(int $sender_id, string $content)
     {
         $this->reply($sender_id, $content);
@@ -30,7 +30,6 @@ class TweetModel extends Model
     **
     ** @param int $parent_post_id: id of the original tweet
     */
-
     public function reply(int $sender_id, string $content, int $parent_post_id = NULL)
     {
         // crééer tweet avec ces paramètres
@@ -132,7 +131,6 @@ class TweetModel extends Model
     **
     ** @return array: all tweets of followed users
     */
-
     public function for_user(Array $following_ids)
     {
         $following_list = '(';
@@ -150,7 +148,8 @@ class TweetModel extends Model
                 content,
                 submit_time
             FROM post INNER JOIN user ON user.id = post.sender_id
-            WHERE sender_id IN ' . $following_list
+            WHERE sender_id IN ' . $following_list . ' 
+            ORDER BY submit_time DESC'
         );
         $get_followers_tweets->execute();
         return(
@@ -165,7 +164,6 @@ class TweetModel extends Model
     **
     ** @return array: all tweets of followed users based on a timestamp
     */
-
     public function for_user_by_time(Array $following_ids, int $timestamp)
     {
         $following_list = '(';
@@ -176,7 +174,7 @@ class TweetModel extends Model
         $following_list = substr($following_list, 0, strlen($following_list) - 1);
         $following_list .= ')';
         
-        $get_followers_tweets = $this->link->prepare(
+        $latest_tweets = $this->link->prepare(
             'SELECT 
                 display_name AS author,
                 username as author_account,
@@ -184,14 +182,14 @@ class TweetModel extends Model
                 submit_time
             FROM post INNER JOIN user ON user.id = post.sender_id
             WHERE sender_id IN ' . $following_list . ' &&
-            submit_time > FROM_UNIXTIME(:stamp)
-            ORDER BY submit_time'
+            submit_time > FROM_UNIXTIME(:stamp) 
+            ORDER BY submit_time DESC'
         );
-        $get_followers_tweets->execute([
-            ':stamp' => $timestamp / 1000
-          ]);
+        $latest_tweets->execute([
+            ':stamp' =>  $timestamp / 1000
+        ]);
         return(
-            $get_followers_tweets->fetchAll(PDO::FETCH_ASSOC)
+            $latest_tweets->fetchAll(PDO::FETCH_ASSOC)
         );
     }
 
