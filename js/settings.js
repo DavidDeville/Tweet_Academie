@@ -20,8 +20,15 @@ $(document).on('click', '#theme', function()
 
 const printTheme = (theme) =>
 {
-  $('#theme').text('Theme : ' + theme);
-  if ($('#theme').text() == 'Theme : light')
+  if (theme === "" || theme === undefined)
+  {
+    $('#theme').text('Theme : dark');
+  }
+  else
+  {
+    $('#theme').text('Theme : ' + theme);
+  }
+  if ($('#theme').text() === 'Theme : light')
   {
     $('#link-theme').attr('href', 'css/light-theme.css');
   }
