@@ -79,7 +79,7 @@ const fetchMessages = () =>
       account_name: account_name
     },
     displayMessages,
-    'html'
+    'text'
   );
 
   timestamp = Date.now();
