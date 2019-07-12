@@ -8,38 +8,42 @@
 
     <h1>Searching something ?</h1>
         
-    <ul class='col-6'>
-      {% for tweet in hashtags %}
-        {% 
-          include('tweet.htm.twig') with 
-          {
-            'author': tweet.author,
-            'submit_time': tweet.submit_time,
-            'author_account': tweet.author_account,
-            'content': tweet.content
-          }
-        %}
-      {% endfor %}
-    </ul>
+    {% if hashtags|length > 0 %}
+      <ul class='col-6'>
+        {% for tweet in hashtags %}
+          {% 
+            include('tweet.htm.twig') with 
+            {
+              'author': tweet.author,
+              'submit_time': tweet.submit_time,
+              'author_account': tweet.author_account,
+              'content': tweet.content
+            }
+          %}
+        {% endfor %}
+      </ul>
+    {% endif %}
     
-    <ul class='col-6'>
-      <table class='table col-6 mt-5 mx-auto'>
-        <tr>
-            <th scope='col'>Pseudo</th>
-            <th scope='col'>City</th>
-            <th scope='col'>Birth date</th>
-        </tr>
-        {% for member in members %}
-          <tr class='table-info'>
-            <td><a href='profile.php?account={{ member.account_name }}'>@{{ member.account_name }}</a></td>
-            <td>{{ member.pseudo }}</td>
-            <td>{{ member.city }}</td>
-            <td>{{ member.birth_date }}</td>
-        </tr>
-        {% endfor %} 
-      </table>
-      
-    </ul>
+    {% if members|length > 0 %}
+      <ul class='col-6'>
+        <table class='table col-6 mt-5 mx-auto'>
+          <tr>
+              <th scope='col'>Pseudo</th>
+              <th scope='col'>City</th>
+              <th scope='col'>Birth date</th>
+          </tr>
+          {% for member in members %}
+            <tr class='table-info'>
+              <td><a href='profile.php?account={{ member.account_name }}'>@{{ member.account_name }}</a></td>
+              <td>{{ member.pseudo }}</td>
+              <td>{{ member.city }}</td>
+              <td>{{ member.birth_date }}</td>
+          </tr>
+          {% endfor %} 
+        </table>
+        
+      </ul>
+    {% endif %}
   </section>
 
 {% endblock %}
