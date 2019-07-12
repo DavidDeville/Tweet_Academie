@@ -109,7 +109,7 @@ class UserModel extends Model
         )['password'];
         return (
             hash(
-                'ripemd160', 
+                'ripemd160',
                 $password . $this->hashSalt
             ) === $user_password
         );
@@ -134,11 +134,11 @@ class UserModel extends Model
     {
         $register_query = $this->link->prepare(
             'INSERT INTO user (
-                username, 
-                display_name, 
-                email, 
-                password, 
-                birth_date, 
+                username,
+                display_name,
+                email,
+                password,
+                birth_date,
                 city
             ) VALUES (
                 :account_name,
@@ -180,12 +180,12 @@ class UserModel extends Model
             $mail = $_POST['signin-mail'];
         }
         $infos_query = $this->link->prepare(
-            'SELECT 
-                id as "account-id", 
-                username as "account-name", 
-                display_name as "pseudo", 
-                email, 
-                birth_date as "birth-date", 
+            'SELECT
+                id as "account-id",
+                username as "account-name",
+                display_name as "pseudo",
+                email,
+                birth_date as "birth-date",
                 city
             FROM user
             WHERE email = :mail'
@@ -304,7 +304,7 @@ class UserModel extends Model
     public function update()
     {
         $update_query = $this->link->prepare(
-            'UPDATE user 
+            'UPDATE user
             SET
                 display_name = :pseudo,
                 email = :mail,
@@ -361,12 +361,12 @@ class UserModel extends Model
     public function get_infos(string $account_name)
     {
         $infos_query = $this->link->prepare(
-            'SELECT 
-                id, 
-                username, 
-                display_name, 
-                email, 
-                birth_date, 
+            'SELECT
+                id,
+                username,
+                display_name,
+                email,
+                birth_date,
                 city
             FROM user WHERE username = :account_name'
         );
@@ -396,17 +396,17 @@ class UserModel extends Model
         {
             $follow_query = $this->link->prepare(
                 'INSERT INTO follower (
-                    user_id, 
-                    follower_id, 
+                    user_id,
+                    follower_id,
                     follow_date
                 ) VALUES (
-                    :user_id, 
-                    :follower_id, 
+                    :user_id,
+                    :follower_id,
                     NOW()
                 )'
             );
             $follow_query->execute([
-                ':user_id' => $target_id, 
+                ':user_id' => $target_id,
                 ':follower_id' => $this->get_account_id()
             ]);
         }
@@ -423,9 +423,9 @@ class UserModel extends Model
     private function follows(int $target_id)
     {
         $follow_query = $this->link->prepare(
-            'SELECT id 
+            'SELECT id
             FROM follower
-            WHERE 
+            WHERE
                 user_id = :target_id &&
                 follower_id = :follower_id'
         );
@@ -446,10 +446,10 @@ class UserModel extends Model
     public function get_followings()
     {
         $followings_query = $this->link->prepare(
-            'SELECT username 
-            FROM follower 
-                INNER JOIN user 
-                    ON follower.user_id = user.id 
+            'SELECT username
+            FROM follower
+                INNER JOIN user
+                    ON follower.user_id = user.id
             WHERE follower_id = :follower_id'
         );
         $followings_query->execute([
@@ -471,7 +471,7 @@ class UserModel extends Model
     {
         $followings_query = $this->link->prepare(
             'SELECT user_id
-            FROM follower 
+            FROM follower
             WHERE follower_id = :follower_id'
         );
         $followings_query->execute([
@@ -492,10 +492,10 @@ class UserModel extends Model
     public function get_followers()
     {
         $followers_query = $this->link->prepare(
-            'SELECT username 
-            FROM follower 
-                INNER JOIN user 
-                    ON follower.user_id = user.id 
+            'SELECT username
+            FROM follower
+                INNER JOIN user
+                    ON follower.user_id = user.id
             WHERE user_id = :user_id'
         );
         $followers_query->execute([
@@ -518,7 +518,7 @@ class UserModel extends Model
     public function by_pattern(string $pattern)
     {
         $pattern_query = $this->link->prepare(
-            'SELECT 
+            'SELECT
                 username as account_name,
                 display_name as pseudo,
                 city,
@@ -553,6 +553,58 @@ class UserModel extends Model
             }
         }
         return ($matches);
+    }
+
+    /*
+    ** Updates the theme depending of the current one
+    **
+    ** @param int $user_id: The current user ID
+    */
+    public function change_theme(int $user_id)
+    {
+      if ($this->get_theme($user_id)['theme'] == 'light')
+      {
+        $changetodark = $this->link->prepare(
+          'UPDATE user
+          SET theme_color = "dark"
+          WHERE id = :user_id'
+        );
+        $changetodark->execute([
+          ':user_id' => $user_id
+        ]);
+      }
+      else
+      {
+        $changetolight = $this->link->prepare(
+          'UPDATE user
+          SET theme_color = "light"
+          WHERE id = :user_id'
+        );
+        $changetolight->execute([
+          ':user_id' => $user_id
+        ]);
+      }
+    }
+
+    /*
+    ** Returns the current user theme
+    **
+    ** @param int $user_id: Current user ID
+    */
+    public function get_theme(int $user_id)
+    {
+      $get_theme = $this->link->prepare(
+        'SELECT theme_color AS "theme"
+        FROM user
+        WHERE id = :user_id'
+      );
+      $get_theme->execute([
+        ':user_id' => $user_id
+      ]);
+      return(
+        $get_theme->fetch(
+          PDO::FETCH_ASSOC
+      ));
     }
 }
 
