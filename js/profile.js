@@ -47,7 +47,28 @@ $('#follow').click((event) =>
     );
 });
 
+/*
+** Redirects the user to the conversation page
+*/
+const displayConversation = (convID) =>
+{
+    location.replace('messenger.php?id=' + convID);
+};
+
+/*
+** AJAX request to get ID of the conversation
+*/
 $('#talk').click((event) =>
 {
     event.preventDefault();
+    console.log(urlParams);
+
+    $.post(
+        'ajax/profile_talk.php',
+        {
+            target: urlParams().account
+        },
+        displayConversation,
+        'text'
+    );
 });

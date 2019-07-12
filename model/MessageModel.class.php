@@ -12,18 +12,7 @@ class MessageModel extends Model
     $all_conv = $this->get_all_convs($id_participants[0]);
     $conv_id = $this->get_conv($all_conv, $id_participants);
 
-    if ($conv_id === NULL)
-    {
-      return (
-        NULL
-      );
-    }
-    else
-    {
-      return (
-        $conv_id
-      );
-    }
+    return ($conv_id);
   }
 
   /*
@@ -89,11 +78,11 @@ class MessageModel extends Model
 
     foreach ($all_conv as $user_conv)
     {
-      $conv_members = $this->get_conversation_members($user_conv['chat_conversation_id']);
+      $conv_members = $this->get_conversation_members($user_conv['conv_id']);
       if ($conv_members === $id_participants)
       {
         return (
-          $user_conv['chat_conversation_id']
+          $user_conv['conv_id']
         );
       }
     }
@@ -143,6 +132,9 @@ class MessageModel extends Model
     {
       $this->add_participant($id_conv, $person);
     }
+    return (
+      $id_conv
+    );
   }
 
   /*
