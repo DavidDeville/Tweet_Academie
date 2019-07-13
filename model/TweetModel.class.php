@@ -32,7 +32,6 @@ class TweetModel extends Model
     */
     public function reply(int $sender_id, string $content, int $parent_post_id = NULL)
     {
-        // crééer tweet avec ces paramètres
         $tweet_query = $this->link->prepare(
             'INSERT INTO post (
                 sender_id, 
@@ -298,7 +297,7 @@ class TweetModel extends Model
     ** @param string $date: the date and time to tweet has been submited on
     ** @param int $author: the ID of the author
     **
-    ** @return in: the ID of the found tweet, or false if no match is found
+    ** @return int: the ID of the found tweet, or false if no match is found
     **      If several matches are found, only the first one is returned
     */
     public function find(string $content, string $date, int $author)
@@ -332,7 +331,6 @@ class TweetModel extends Model
     **
     ** @return array: number of likes
     */
-
     public function get_likes(int $post_id)
     {
         $get_likes_query = $this->link->prepare(
@@ -357,7 +355,6 @@ class TweetModel extends Model
     **
     ** @return array: id of the likers
     */
-
     public function get_likers(int $post_id)
     {
         $get_likers_query = $this->link->prepare(
@@ -382,7 +379,6 @@ class TweetModel extends Model
     **
     ** @param int $source_id: id of the original tweet
     */
-
     public function repost(int $sender_id, int $source_id)
     {
         $source = $this->get_tweet($source_id);

@@ -25,7 +25,6 @@ $latest_tweets = $tweet->for_user_by_time(
     $_POST['timestamp']
 );
 
-//var_dump($latest_tweets);
 foreach($latest_tweets as $tweet)
 {
     echo $twig->render('tweet.htm.twig', [
@@ -34,13 +33,6 @@ foreach($latest_tweets as $tweet)
         'author_account' => $tweet['author_account'],
         'content' => $tweet['content']
     ]);
-
-    //var_dump($tweet);
 }
-
-//var_dump($user->get_followings_id());
-//var_dump($followings_id);
-//var_dump($latest_tweets);
-//var_dump($_POST);
 
 ?>
