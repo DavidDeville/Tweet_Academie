@@ -93,7 +93,10 @@ abstract class PageController extends Controller
         }   
     }
 
-    private function add_custom_filters()
+    /*
+    ** Applies custom filter to twig environment
+    */
+    protected function add_custom_filters()
     {
         $this->twig->addFilter(new Twig_SimpleFilter('link_hashtags', function ($input) 
         {

@@ -122,7 +122,7 @@ final class IndexController extends PageController
                     {
                         $this->upload_image();
                     }
-                    $this->create_new_tweet();
+                    $this->create_new_tweet(); 
                 }
             }
         }
@@ -337,7 +337,6 @@ final class IndexController extends PageController
     /*
     ** Reposts the tweet
     ** Posts a copy of the tweet in database with connected user as sender
-    **
     */
     private function repost_tweet() 
     {
