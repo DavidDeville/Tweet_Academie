@@ -13,6 +13,16 @@ $user = new UserModel();
 $twig = new Twig_Environment(
     new Twig_Loader_Filesystem(__DIR__ . '/../view')
 );
+$twig->addFilter(new Twig_SimpleFilter('link_hashtags', function ($input) 
+{
+    return (
+        preg_replace(
+            '/#(\w+)/', 
+            "<a href='search.php?search=%23$1'>#$1</a>", 
+            $input
+        )
+    );
+}));
 
 $followings_id = $user->get_followings_id();
 array_push(
