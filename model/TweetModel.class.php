@@ -32,7 +32,7 @@ class TweetModel extends Model
     */
     public function reply(int $sender_id, string $content, int $parent_post_id = NULL)
     {
-        // crééer tweet avec ces paramètres
+        
         $tweet_query = $this->link->prepare(
             'INSERT INTO post (
                 sender_id, 

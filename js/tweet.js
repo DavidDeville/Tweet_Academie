@@ -77,7 +77,7 @@ $('#tweet-send').click((event) =>
 
     const form =
     {
-        'tweet-content': $('#tweet-content').val() // La valeur du tweet
+        'tweet-content': $('#tweet-content').val()
     };
 
     /*
