@@ -37,6 +37,7 @@ abstract class PageController extends Controller
         $this->twig = new Twig_Environment(
             new Twig_Loader_Filesystem(__DIR__ . '/../view')
         );
+        $this->add_custom_filters();
 
         $this->public_pages = ['index.php'];
         $this->redirect();
@@ -90,6 +91,20 @@ abstract class PageController extends Controller
         {
             return (false);
         }   
+    }
+
+    private function add_custom_filters()
+    {
+        $this->twig->addFilter(new Twig_SimpleFilter('link_hashtags', function ($input) 
+        {
+            return (
+                preg_replace(
+                    '/#(\w+)/', 
+                    "<a href='search.php?search=%23$1'>#$1</a>", 
+                    $input
+                )
+            );
+        }));
     }
 }
 

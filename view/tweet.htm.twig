@@ -14,7 +14,12 @@
             <small class='tweet-submited'>{{ submit_time }}</small>
         </div>
         <p class="mb-1 tweet-author"><a href='profile.php?account={{ author_account }}'>@{{ author_account }}</a></p>
-        <p class="mb-1 tweet-content">{{ content }}</p>
+        
+        {# <p class="mb-1 tweet-content">{{ content | format({'#segpa' : 'test'}) }}</p> #}
+        
+        {# <p class="mb-1 tweet-content">{{ content | replace({'/#(\w+)/' : "<a href='seach.php?search=%23$1'>#$1</a>"}) }}</p> #}
+        <p class="mb-1 tweet-content">{{ content | link_hashtags | raw }}</p>
+        
         <small type="button" class='tweet-reply'><i class="fas fa-reply"></i></small>
         <small type="button" class='tweet-retweet'><i class="fas fa-retweet"></i></small>
         <small type="button" class='tweet-like'><i class="fas fa-heart"><span class="badge badge-light"></span></i></small>
