@@ -124,7 +124,7 @@ final class ProfileController extends PageController
             UploadModel::PROFILE
         );
     }
-
+    
     /*
     ** Creates the given directory if it doesn't already exist
     **

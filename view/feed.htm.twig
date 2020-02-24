@@ -17,7 +17,8 @@
             <div class="row">
                 <div class="card-header col-7 bg-primary border-0 text-info">Let's Tweet</div>
                 <div class="input-group-text col-1 bg-primary border-0 text-light rounded-0" id="tweet-send" type="button">Send Tweet</div>
-            <input type="text" class="form-control col-8 bg-primary border-0 rounded-0 text-light" placeholder="Type your tweet..." id="tweet-content" autocomplete="off"></textarea>
+                <input type="text" class="form-control col-8 bg-primary border-0 rounded-0 text-light" placeholder="Type your tweet..." id="tweet-content" autocomplete="off">
+                <input type='file' value='Upload an image' id='tweet-upload' class='d-none'> {#  Tweet model can't handle uploads #}
             </div>
         </div>
     </div>
@@ -44,6 +45,7 @@
 
 {% block javascript %}
   {{ parent() }}
+  <script src='js/url.js'></script>
   <script src='js/forms.js'></script>
   <script src='js/tweet.js'></script>
 {% endblock %}
